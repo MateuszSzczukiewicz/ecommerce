@@ -1,9 +1,12 @@
-// import { type ProductItemType } from "@/app/ui/types";
+import { ProductListItem } from "@/app/ui/molecules/ProductListItem";
+import { type ProductItemType } from "@/app/types";
 
-// type ProductListItemProps = {
-// 	product: ProductItemType;
-// };
-
-export const ProductList = () => {
-	return <div></div>;
+export const ProductList = ({ products }: { products: ProductItemType[] }) => {
+	return (
+		<ul className="grid grid-cols-4">
+			{products.map((product) => (
+				<ProductListItem key={product.id} product={product} />
+			))}
+		</ul>
+	);
 };
