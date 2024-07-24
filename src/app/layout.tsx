@@ -16,7 +16,16 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>{children}</body>
+			<body className={inter.className}>
+				<section>{children}</section>
+				<footer>
+					&copy; 2023 My Website. All rights reserved.
+					<a href="https://github.com/vercel/next.js/tree/canary/examples/with-typescript">
+						Source code
+					</a>
+					|<a href="https://vercel.com">Powered by Vercel</a>
+				</footer>
+			</body>
 		</html>
 	);
 }
