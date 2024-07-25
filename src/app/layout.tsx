@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ActiveLink } from "@/ui/atoms/ActiveLink";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +16,18 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="pl">
 			<body className={inter.className}>
+				<nav>
+					<ul>
+						<li>
+							<ActiveLink href="/homepage">Homepage</ActiveLink>
+						</li>
+						<li>
+							<ActiveLink href="/products">Produkty</ActiveLink>
+						</li>
+					</ul>
+				</nav>
 				<section>{children}</section>
 				<footer>
 					&copy; 2023 My Website. All rights reserved.
