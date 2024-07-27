@@ -19,12 +19,12 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
 	const product = await getProductById(params.productId);
 	return {
-		title: `${product.name} - Sklep internetowy`,
+		title: `${product.title} - Sklep internetowy`,
 		description: `${product.longDescription}`,
 		openGraph: {
-			title: `${product.name} - Sklep internetowy`,
+			title: `${product.title} - Sklep internetowy`,
 			description: `${product.longDescription}`,
-			images: [{ url: product.coverImage.src }],
+			images: [{ url: product.image }],
 		},
 	};
 };
@@ -34,7 +34,7 @@ export default async function SingleProductPage({ params }: { params: { productI
 	return (
 		<>
 			<article className="max-w-xs">
-				<ProductCoverImage {...product.coverImage} />
+				<ProductCoverImage src={product.image} alt={product.title} />
 				<ProductListItemDescription product={product} />
 			</article>
 			<aside>

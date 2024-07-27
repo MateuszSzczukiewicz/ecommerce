@@ -6,12 +6,12 @@ type ProductListItemDescriptionProps = {
 };
 
 export const ProductListItemDescription = ({
-	product: { category, name, price },
+	product: { category, title, price },
 }: ProductListItemDescriptionProps) => {
 	return (
 		<div className="mt-3 flex justify-between">
 			<div>
-				<h3 className="font-semibold">{name}</h3>
+				<h3 className="font-semibold">{title}</h3>
 				<p>{category}</p>
 			</div>
 			<p className="font-semibold">{formatMoney(price / 100)}</p>
