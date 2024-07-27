@@ -1,15 +1,13 @@
-export const ProductsList = async ({ page }: { page: number }) => {
-	const take = 10;
-	const offset = 10 * (page - 1);
-	const res = await fetch(
-		`https://naszsklep-api.vercel.app/api/products?offset=${offset}&take=${take}`,
-	);
-	const products = (await res.json()) as { id: string; title: string }[];
+import { type ProductItemType } from "@/app/types";
+import { getProductsListByPage } from "@/api/products";
+import { ProductsListItem } from "@/ui/molecules/ProductsListItem";
 
+export const ProductsList = async ({ page }: { page: number }) => {
+	const products = await getProductsListByPage({ page });
 	return (
 		<>
-			{products.map((product) => (
-				<li key={product.id}>{product.title}</li>
+			{products.map((product: ProductItemType) => (
+				<ProductsListItem key={product.id} product={product} />
 			))}
 		</>
 	);
