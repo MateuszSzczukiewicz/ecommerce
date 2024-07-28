@@ -3,9 +3,7 @@ export const ProductCoverImage = ({ src, alt }: { src: string; alt: string }) =>
 		<img
 			src={src}
 			alt={alt}
-			className="rounded-md bg-zinc-100 p-5 transition hover:p-0"
-			width="320"
-			height="320"
+			className="h-80 w-80 rounded-md bg-zinc-100 object-cover p-5 transition hover:p-0"
 		/>
 	);
 };

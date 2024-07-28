@@ -19,8 +19,8 @@ export default function RootLayout({
 	return (
 		<html lang="pl">
 			<body className={inter.className}>
-				<nav>
-					<ul>
+				<nav className="sticky top-0 flex h-16 items-center justify-center bg-zinc-200 bg-opacity-60 backdrop-blur-xl">
+					<ul className="flex gap-5">
 						<li>
 							<ActiveLink href="/">Homepage</ActiveLink>
 						</li>
@@ -29,7 +29,7 @@ export default function RootLayout({
 						</li>
 					</ul>
 				</nav>
-				<section>{children}</section>
+				<section className="mt-5 flex justify-center">{children}</section>
 				<footer>
 					&copy; 2023 My Website. All rights reserved.
 					<a href="https://github.com/vercel/next.js/tree/canary/examples/with-typescript">
