@@ -30,6 +30,10 @@ const productResponseItemToProductItemType = (product: ProductItemType): Product
 		description: product.description,
 		category: product.category,
 		price: product.price,
+		rating: {
+			rate: product.rating.rate,
+			count: product.rating.count,
+		},
 		image: product.image,
 		longDescription: product.longDescription,
 	};

@@ -32,16 +32,16 @@ export const generateMetadata = async ({
 export default async function SingleProductPage({ params }: { params: { productId: string } }) {
 	const product = await getProductById(params.productId);
 	return (
-		<>
-			<article className="max-w-xs">
+		<div className="flex flex-col gap-20">
+			<article className="flex items-center justify-around">
 				<ProductCoverImage src={product.image} alt={product.title} />
 				<ProductListItemDescription product={product} />
 			</article>
-			<aside>
+			<aside className="">
 				<Suspense fallback>
 					<SuggestedProductsList />
 				</Suspense>
 			</aside>
-		</>
+		</div>
 	);
 }
