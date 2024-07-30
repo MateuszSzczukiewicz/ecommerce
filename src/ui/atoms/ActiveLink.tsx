@@ -8,18 +8,23 @@ import { type Route } from "next";
 type ActiveLinkProps<T extends string> = {
 	href: Route<T>;
 	children: ReactNode;
+	exact?: boolean;
 };
 
-export const ActiveLink = <T extends string>({ href, children }: ActiveLinkProps<T>) => {
+export const ActiveLink = <T extends string>({
+	href,
+	children,
+	exact = true,
+}: ActiveLinkProps<T>) => {
 	const pathname = usePathname();
 
-	const isActive = pathname === href;
-	const activeClassName = `text-zinc-950 font-semibold text-xl`;
+	const isActive = exact ? pathname === href : pathname.startsWith(href);
+	const activeClassName = "text-zinc-950 font-semibold text-xl";
 
 	return (
 		<Link
 			href={{ pathname: href }}
-			className={clsx(`h-full text-lg text-zinc-600 hover:text-zinc-950`, {
+			className={clsx("h-full text-lg text-zinc-600 hover:text-zinc-950", {
 				[activeClassName]: isActive,
 			})}
 			aria-current="page"

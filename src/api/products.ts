@@ -8,8 +8,8 @@ export const getProductsList = async () => {
 };
 
 export const getProductsListByPage = async ({ page }: { page: number }) => {
-	const offset = 10 * (page - 1);
-	const take = 10;
+	const offset = 20 * (page - 1);
+	const take = 20;
 	const res = await fetch(
 		`https://naszsklep-api.vercel.app/api/products?offset=${offset}&take=${take}`,
 	);

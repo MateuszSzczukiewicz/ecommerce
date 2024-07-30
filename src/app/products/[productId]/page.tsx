@@ -37,7 +37,7 @@ export default async function SingleProductPage({ params }: { params: { productI
 				<ProductCoverImage src={product.image} alt={product.title} />
 				<ProductListItemDescription product={product} />
 			</article>
-			<aside className="">
+			<aside>
 				<Suspense fallback>
 					<SuggestedProductsList />
 				</Suspense>
