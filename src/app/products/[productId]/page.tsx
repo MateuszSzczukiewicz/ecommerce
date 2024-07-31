@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { type Metadata } from "next";
 import { getProductById, getProductsList } from "@/api/products";
-import { ProductCoverImage } from "@/ui/atoms/ProductCoverImage";
-import { ProductListItemDescription } from "@/ui/atoms/ProductsListItemDescription";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProductsList";
+import { formatMoney } from "@/app/utils";
 
 export const generateStaticParams = async () => {
 	const products = await getProductsList();
@@ -34,8 +33,17 @@ export default async function SingleProductPage({ params }: { params: { productI
 	return (
 		<div className="flex flex-col gap-20">
 			<article className="flex items-center justify-around">
-				<ProductCoverImage src={product.image} alt={product.title} />
-				<ProductListItemDescription product={product} />
+				<img src={product.image} alt={product.title} />
+				<div>
+					<h1>{product.title}</h1>
+					<h2>{product.category}</h2>
+					<p>{formatMoney(product.price / 100)}</p>
+					<p>{product.longDescription}</p>
+					<div>
+						<h3>Ocena: {product.rating.rate}</h3>
+						<p>Oceniono: {product.rating.count} razy</p>
+					</div>
+				</div>
 			</article>
 			<aside>
 				<Suspense fallback>

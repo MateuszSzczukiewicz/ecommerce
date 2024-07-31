@@ -1,4 +1,4 @@
-export const ProductCoverImage = ({ src, alt }: { src: string; alt: string }) => {
+export const ProductsListCoverImage = ({ src, alt }: { src: string; alt: string }) => {
 	return (
 		<img
 			src={src}

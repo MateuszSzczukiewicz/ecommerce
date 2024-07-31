@@ -1,3 +1,4 @@
+import { type FC } from "react";
 import { type ProductItemType } from "@/app/types";
 import { formatMoney } from "@/app/utils";
 
@@ -5,9 +6,9 @@ type ProductListItemDescriptionProps = {
 	product: ProductItemType;
 };
 
-export const ProductListItemDescription = ({
+export const ProductListItemDescription: FC<ProductListItemDescriptionProps> = ({
 	product: { category, title, price },
-}: ProductListItemDescriptionProps) => {
+}) => {
 	return (
 		<div className="mt-3 flex justify-between">
 			<div>
