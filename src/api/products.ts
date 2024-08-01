@@ -1,39 +1,37 @@
-import { type ProductItemType } from "@/app/types";
+import { type TypedDocumentString } from "@/gql/graphql";
 
-export const getProductsList = async () => {
-	const res = await fetch("https://naszsklep-api.vercel.app/api/products");
-	const productsResponse = (await res.json()) as ProductItemType[];
-	const products = productsResponse.map(productResponseItemToProductItemType);
-	return products;
-};
+type GraphQLResponse<T> =
+	| { data?: undefined; errors: { message: string }[] }
+	| { data: T; errors?: undefined };
 
-export const getProductsListByPage = async ({ page, take }: { page: number; take: number }) => {
-	const offset = take * (page - 1);
-	const res = await fetch(
-		`https://naszsklep-api.vercel.app/api/products?offset=${offset}&take=${take}`,
-	);
-	const products = (await res.json()) as ProductItemType[];
-	return products;
-};
+export const executeGraphql = async <TResult, TVariables>(
+	query: TypedDocumentString<TResult, TVariables>,
+	...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
+): Promise<TResult> => {
+	if (!process.env.GRAPHQL_URL) {
+		throw TypeError("GRAPHQL_URL is not defined");
+	}
 
-export const getProductById = async (id: ProductItemType["id"]) => {
-	const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${id}`);
-	const productResponse = (await res.json()) as ProductItemType;
-	return productResponseItemToProductItemType(productResponse);
-};
-
-const productResponseItemToProductItemType = (product: ProductItemType): ProductItemType => {
-	return {
-		id: product.id,
-		title: product.title,
-		description: product.description,
-		category: product.category,
-		price: product.price,
-		rating: {
-			rate: product.rating.rate,
-			count: product.rating.count,
+	const res = await fetch(process.env.GRAPHQL_URL, {
+		method: "POST",
+		body: JSON.stringify({
+			query,
+			variables,
+		}),
+		headers: {
+			"Content-Type": "application/json",
 		},
-		image: product.image,
-		longDescription: product.longDescription,
-	};
+	});
+
+	const GraphQLResponse = (await res.json()) as GraphQLResponse<TResult>;
+
+	if (GraphQLResponse.errors) {
+		throw new TypeError(`GraphQL Error`, {
+			cause: GraphQLResponse.errors,
+		});
+	}
+
+	return GraphQLResponse.data;
 };
+
+const products = await executeGraphql(ProductsGetListDocument);
