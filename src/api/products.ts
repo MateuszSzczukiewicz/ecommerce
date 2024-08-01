@@ -1,4 +1,5 @@
-import { type TypedDocumentString } from "@/gql/graphql";
+import { type ProductItemType } from "./../app/types";
+import { ProductsGetListDocument, type TypedDocumentString } from "@/gql/graphql";
 
 type GraphQLResponse<T> =
 	| { data?: undefined; errors: { message: string }[] }
@@ -34,4 +35,21 @@ export const executeGraphql = async <TResult, TVariables>(
 	return GraphQLResponse.data;
 };
 
-const products = await executeGraphql(ProductsGetListDocument);
+export const getProductsList = async (): Promise<ProductItemType[]> => {
+	const graphqlResponse = await executeGraphql(ProductsGetListDocument);
+
+	return graphqlResponse.products.data.map((p) => {
+		return {
+			id: p.id,
+			name: p.name,
+			description: p.description,
+			images: p.images.map((image) => ({
+				url: image.url,
+				alt: image.alt,
+				width: image.width,
+				height: image.height,
+			})),
+			price: p.price,
+		};
+	});
+};
