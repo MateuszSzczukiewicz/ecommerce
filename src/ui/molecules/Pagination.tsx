@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type PaginationProps = {
 	currentPage: number;
@@ -24,7 +25,7 @@ export const Pagination: FC<PaginationProps> = ({ currentPage, take, totalPages 
 				onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
 				disabled={currentPage === 1}
 			>
-				Poprzednia
+				<ChevronLeft />
 			</button>
 			{pages.map((page: number) => (
 				<button
@@ -40,7 +41,7 @@ export const Pagination: FC<PaginationProps> = ({ currentPage, take, totalPages 
 				onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
 			>
-				Następna
+				<ChevronRight />
 			</button>
 		</nav>
 	);

@@ -3,7 +3,7 @@ export const ProductsListCoverImage = ({ src, alt }: { src: string; alt: string 
 		<img
 			src={src}
 			alt={alt}
-			className="h-80 w-80 rounded-md bg-zinc-100 object-cover p-5 transition hover:p-0"
+			className="h-80 w-80 rounded-md bg-zinc-100 object-cover p-5 transition hover:p-3"
 		/>
 	);
 };

@@ -6,7 +6,7 @@ export const ProductsList = async ({ page, take }: { page: number; take: number 
 	const products = await getProductsListByPage({ page, take });
 
 	return (
-		<ul className="grid grid-cols-4 gap-5">
+		<ul className="grid grid-cols-4 gap-10">
 			{products.map((product: ProductItemType) => (
 				<ProductsListItem key={product.id} product={product} />
 			))}
