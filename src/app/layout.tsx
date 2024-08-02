@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { type ReactNode } from "react";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin", "latin-ext"] });
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="pl">
-			<body className={inter.className}>
+			<body className={montserrat.className}>
 				<nav className="sticky top-0 flex h-16 items-center justify-center bg-zinc-200 bg-opacity-60 backdrop-blur-xl">
 					<ul className="flex gap-5">
 						<li>

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { type FC } from "react";
-import { type ProductItemType } from "@/app/types";
-import { ProductsListCoverImage } from "@/ui/atoms/ProductsListCoverImage";
 import { ProductListItemDescription } from "@/ui/atoms/ProductsListItemDescription";
+import { type ProductListItemFragment } from "@/gql/graphql";
+import { ProductCoverImage } from "@/ui/atoms/ProductCoverImage";
 
 type ProductListItemProps = {
-	product: ProductItemType;
+	product: ProductListItemFragment;
 };
 
 export const ProductsListItem: FC<ProductListItemProps> = ({ product }) => {
@@ -13,7 +13,7 @@ export const ProductsListItem: FC<ProductListItemProps> = ({ product }) => {
 		<li>
 			<Link href={{ pathname: `/products/${product.id}` }}>
 				<article className="w-80">
-					<ProductsListCoverImage src={product.image} alt={product.title} />
+					<ProductCoverImage product={product} />
 					<ProductListItemDescription product={product} />
 				</article>
 			</Link>

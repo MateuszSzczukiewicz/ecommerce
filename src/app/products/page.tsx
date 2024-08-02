@@ -9,8 +9,11 @@ export default async function ProductsPage({
 	searchParams: { [key: string]: string[] | undefined };
 }) {
 	const page = Number(searchParams["page"] ?? 1);
-	const take = Number(searchParams["take"] ?? 20);
-	const totalPages = Math.ceil((await getProductsList()).length / take);
+	const take = Number(searchParams["take"] ?? 10);
+
+	const { total } = await getProductsList();
+	const totalPages = Math.ceil(total / take);
+
 	return (
 		<>
 			<ul>

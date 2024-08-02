@@ -1,39 +1,26 @@
-import { type ProductItemType } from "@/app/types";
+import { ProductGetByIdDocument, ProductsGetListDocument } from "@/gql/graphql";
+import { executeGraphql } from "@/api/graphqlApi";
 
-export const getProductsList = async () => {
-	const res = await fetch("https://naszsklep-api.vercel.app/api/products");
-	const productsResponse = (await res.json()) as ProductItemType[];
-	const products = productsResponse.map(productResponseItemToProductItemType);
-	return products;
-};
+export const getProductsList = async (take?: number, skip?: number) => {
+	const graphqlResponse = await executeGraphql(ProductsGetListDocument, {
+		take,
+		skip,
+	});
 
-export const getProductsListByPage = async ({ page, take }: { page: number; take: number }) => {
-	const offset = take * (page - 1);
-	const res = await fetch(
-		`https://naszsklep-api.vercel.app/api/products?offset=${offset}&take=${take}`,
-	);
-	const products = (await res.json()) as ProductItemType[];
-	return products;
-};
+	const data = graphqlResponse.products.data;
 
-export const getProductById = async (id: ProductItemType["id"]) => {
-	const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${id}`);
-	const productResponse = (await res.json()) as ProductItemType;
-	return productResponseItemToProductItemType(productResponse);
-};
+	const total = graphqlResponse.products.meta.total;
 
-const productResponseItemToProductItemType = (product: ProductItemType): ProductItemType => {
 	return {
-		id: product.id,
-		title: product.title,
-		description: product.description,
-		category: product.category,
-		price: product.price,
-		rating: {
-			rate: product.rating.rate,
-			count: product.rating.count,
-		},
-		image: product.image,
-		longDescription: product.longDescription,
+		data,
+		total,
 	};
+};
+
+export const getProductById = async (id: string) => {
+	const graphqlResponse = await executeGraphql(ProductGetByIdDocument, {
+		id,
+	});
+
+	return graphqlResponse.product;
 };

@@ -1,19 +1,21 @@
 import { type FC } from "react";
-import { type ProductItemType } from "@/app/types";
 import { formatMoney } from "@/app/utils";
+import { type ProductListItemFragment } from "@/gql/graphql";
 
 type ProductListItemDescriptionProps = {
-	product: ProductItemType;
+	product: ProductListItemFragment;
 };
 
 export const ProductListItemDescription: FC<ProductListItemDescriptionProps> = ({
-	product: { category, title, price },
+	product: { name, price, categories },
 }) => {
+	const categoryName = categories[0].name;
+
 	return (
 		<div className="mt-3 flex justify-between">
 			<div>
-				<h3 className="font-semibold">{title}</h3>
-				<p>{category}</p>
+				<h3 className="font-semibold">{name}</h3>
+				<p>{categoryName}</p>
 			</div>
 			<p className="font-semibold">{formatMoney(price / 100)}</p>
 		</div>
