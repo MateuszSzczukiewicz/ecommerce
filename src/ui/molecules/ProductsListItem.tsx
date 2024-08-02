@@ -9,11 +9,13 @@ type ProductListItemProps = {
 };
 
 export const ProductsListItem: FC<ProductListItemProps> = ({ product }) => {
+	const productImage = product.images.length > 0 ? product.images[0] : null;
+
 	return (
 		<li>
 			<Link href={{ pathname: `/products/${product.id}` }}>
 				<article className="w-80">
-					<ProductsListCoverImage productImages={product.images} />
+					{productImage && <ProductsListCoverImage productImage={productImage} />}
 					<ProductListItemDescription product={product} />
 				</article>
 			</Link>
