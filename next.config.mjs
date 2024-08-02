@@ -6,6 +6,15 @@ const nextConfig = {
 		typedRoutes: true,
 		mdxRs: true,
 	},
+	redirects: async () => {
+		return [
+			{
+				source: "/",
+				destination: "/docs",
+				permanent: false,
+			},
+		];
+	},
 };
 
 const withMDX = createMDX();

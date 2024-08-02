@@ -1,9 +1,12 @@
-query ProductsGetList {
-	products {
+query ProductsGetList($take: Int, $skip: Int) {
+	products(take: $take, skip: $skip) {
 		data {
 			id
 			name
 			description
+			categories {
+				name
+			}
 			images {
 				url
 				alt
@@ -11,6 +14,9 @@ query ProductsGetList {
 				height
 			}
 			price
+		}
+		meta {
+			total
 		}
 	}
 }

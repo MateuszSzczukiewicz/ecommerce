@@ -1,55 +1,36 @@
-import { type ProductItemType } from "./../app/types";
-import { ProductsGetListDocument, type TypedDocumentString } from "@/gql/graphql";
+import { type ProductsResponseType, type ProductItemType } from "@/app/types";
+import { ProductsGetListDocument } from "@/gql/graphql";
+import { executeGraphql } from "@/api/graphqlApi";
 
-type GraphQLResponse<T> =
-	| { data?: undefined; errors: { message: string }[] }
-	| { data: T; errors?: undefined };
-
-export const executeGraphql = async <TResult, TVariables>(
-	query: TypedDocumentString<TResult, TVariables>,
-	...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
-): Promise<TResult> => {
-	if (!process.env.GRAPHQL_URL) {
-		throw TypeError("GRAPHQL_URL is not defined");
-	}
-
-	const res = await fetch(process.env.GRAPHQL_URL, {
-		method: "POST",
-		body: JSON.stringify({
-			query,
-			variables,
-		}),
-		headers: {
-			"Content-Type": "application/json",
-		},
+export const getProductsList = async (
+	take?: number,
+	skip?: number,
+): Promise<ProductsResponseType> => {
+	const graphqlResponse = await executeGraphql(ProductsGetListDocument, {
+		take,
+		skip,
 	});
 
-	const GraphQLResponse = (await res.json()) as GraphQLResponse<TResult>;
+	const data: ProductItemType[] = graphqlResponse.products.data.map((p) => ({
+		id: p.id,
+		name: p.name,
+		description: p.description,
+		categories: p.categories.map((c) => ({
+			name: c.name,
+		})),
+		images: p.images.map((i) => ({
+			url: i.url,
+			alt: i.alt,
+			width: i.width,
+			height: i.height,
+		})),
+		price: p.price,
+	}));
 
-	if (GraphQLResponse.errors) {
-		throw new TypeError(`GraphQL Error`, {
-			cause: GraphQLResponse.errors,
-		});
-	}
+	const total = graphqlResponse.products.meta.total;
 
-	return GraphQLResponse.data;
-};
-
-export const getProductsList = async (): Promise<ProductItemType[]> => {
-	const graphqlResponse = await executeGraphql(ProductsGetListDocument);
-
-	return graphqlResponse.products.data.map((p) => {
-		return {
-			id: p.id,
-			name: p.name,
-			description: p.description,
-			images: p.images.map((image) => ({
-				url: image.url,
-				alt: image.alt,
-				width: image.width,
-				height: image.height,
-			})),
-			price: p.price,
-		};
-	});
+	return {
+		data,
+		total,
+	};
 };

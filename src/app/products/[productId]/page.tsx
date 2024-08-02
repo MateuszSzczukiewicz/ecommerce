@@ -31,7 +31,7 @@ export default async function SingleProductPage({ params }: { params: { productI
 	const product = await getProductById(params.productId);
 	return (
 		<article className="flex justify-center gap-10">
-			<ProductCoverImage src={product.image} alt={product.title} />
+			<ProductCoverImage productImages={product.images} />
 			<ProductDetails product={product} />
 		</article>
 	);

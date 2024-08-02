@@ -7,13 +7,15 @@ type ProductListItemDescriptionProps = {
 };
 
 export const ProductListItemDescription: FC<ProductListItemDescriptionProps> = ({
-	product: { category, title, price },
+	product: { name, price, categories },
 }) => {
+	const categoryName = categories[0].name;
+
 	return (
 		<div className="mt-3 flex justify-between">
 			<div>
-				<h3 className="font-semibold">{title}</h3>
-				<p>{category}</p>
+				<h3 className="font-semibold">{name}</h3>
+				<p>{categoryName}</p>
 			</div>
 			<p className="font-semibold">{formatMoney(price / 100)}</p>
 		</div>

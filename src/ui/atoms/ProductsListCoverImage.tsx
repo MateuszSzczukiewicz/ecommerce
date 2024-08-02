@@ -1,9 +1,25 @@
-export const ProductsListCoverImage = ({ src, alt }: { src: string; alt: string }) => {
+import NextImage from "next/image";
+import { type FC } from "react";
+
+type ProductImagesProps = {
+	productImages: {
+		url: string;
+		alt: string;
+		width: number;
+		height: number;
+	};
+};
+
+export const ProductsListCoverImage: FC<ProductImagesProps> = ({
+	productImages: { url, alt, width, height },
+}) => {
 	return (
-		<img
-			src={src}
+		<NextImage
+			src={url}
 			alt={alt}
-			className="h-80 w-80 rounded-md bg-zinc-100 object-cover p-5 transition hover:p-3"
+			width={width}
+			height={height}
+			className="rounded-md bg-zinc-100 object-cover p-5 transition hover:p-3"
 		/>
 	);
 };

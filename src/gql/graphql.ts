@@ -278,10 +278,13 @@ export enum SortDirection {
   Desc = 'DESC'
 }
 
-export type ProductsGetListQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProductsGetListQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 
-export type ProductsGetListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, images: Array<{ url: string, alt: string, width: number, height: number }> }> } };
+export type ProductsGetListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }>, meta: { total: number } } };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -299,12 +302,15 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const ProductsGetListDocument = new TypedDocumentString(`
-    query ProductsGetList {
-  products {
+    query ProductsGetList($take: Int, $skip: Int) {
+  products(take: $take, skip: $skip) {
     data {
       id
       name
       description
+      categories {
+        name
+      }
       images {
         url
         alt
@@ -312,6 +318,9 @@ export const ProductsGetListDocument = new TypedDocumentString(`
         height
       }
       price
+    }
+    meta {
+      total
     }
   }
 }

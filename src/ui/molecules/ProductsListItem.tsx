@@ -13,7 +13,7 @@ export const ProductsListItem: FC<ProductListItemProps> = ({ product }) => {
 		<li>
 			<Link href={{ pathname: `/products/${product.id}` }}>
 				<article className="w-80">
-					<ProductsListCoverImage src={product.image} alt={product.title} />
+					<ProductsListCoverImage productImages={product.images} />
 					<ProductListItemDescription product={product} />
 				</article>
 			</Link>
