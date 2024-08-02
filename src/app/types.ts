@@ -13,12 +13,16 @@ export type ProductItemType = {
 	id: string;
 	name: string;
 	description: string;
+	price: number;
 	categories: ProductCategoryType[];
 	images: ProductImageType[];
-	price: number;
 };
 
 export type ProductsResponseType = {
 	data: ProductItemType[];
 	total: number;
+};
+
+export type SingleProductResponseType = {
+	product?: ProductItemType | null;
 };

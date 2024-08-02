@@ -278,6 +278,13 @@ export enum SortDirection {
   Desc = 'DESC'
 }
 
+export type ProductGetBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type ProductGetBySlugQuery = { product?: { id: string, name: string, description: string, price: number, images: Array<{ url: string, alt: string, width: number, height: number }>, categories: Array<{ name: string }> } | null };
+
 export type ProductsGetListQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -301,6 +308,25 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const ProductGetBySlugDocument = new TypedDocumentString(`
+    query ProductGetBySlug($slug: String!) {
+  product(slug: $slug) {
+    id
+    name
+    description
+    price
+    images {
+      url
+      alt
+      width
+      height
+    }
+    categories {
+      name
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ProductGetBySlugQuery, ProductGetBySlugQueryVariables>;
 export const ProductsGetListDocument = new TypedDocumentString(`
     query ProductsGetList($take: Int, $skip: Int) {
   products(take: $take, skip: $skip) {

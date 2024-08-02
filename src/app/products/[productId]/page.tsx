@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { getProductById, getProductsList } from "@/api/products";
+import { getProductsList } from "@/api/products";
 import { ProductCoverImage } from "@/ui/atoms/ProductCoverImage";
 import { ProductDetails } from "@/ui/atoms/ProductDetails";
 
