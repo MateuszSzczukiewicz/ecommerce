@@ -1,4 +1,4 @@
-// import NextImage from "next/image";
+import NextImage from "next/image";
 import { type FC } from "react";
 import { type ProductListItemFragment } from "@/gql/graphql";
 
@@ -10,7 +10,7 @@ export const ProductCoverImage: FC<ProductCoverImageProps> = ({ product }) => {
 	const { url, alt, width, height } = product.images[0];
 
 	return (
-		<img
+		<NextImage
 			src={url}
 			alt={alt}
 			width={width}

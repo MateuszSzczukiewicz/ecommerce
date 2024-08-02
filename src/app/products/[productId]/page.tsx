@@ -34,6 +34,8 @@ export const generateMetadata = async ({
 export default async function SingleProductPage({ params }: { params: { productId: string } }) {
 	const product = await getProductById(params.productId);
 
+	if (!product) return <div>Product not found</div>;
+
 	return (
 		<article className="flex justify-center gap-10">
 			<ProductCoverImage product={product} />

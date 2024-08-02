@@ -17,15 +17,13 @@ export const ActiveLink = <T extends string>({
 	exact = true,
 }: ActiveLinkProps<T>) => {
 	const pathname = usePathname();
-
 	const isActive = exact ? pathname === href : pathname.startsWith(href);
-	const activeClassName = "text-zinc-950 font-semibold text-xl";
 
 	return (
 		<Link
 			href={{ pathname: href }}
 			className={clsx("h-full text-lg text-zinc-600 hover:text-zinc-950", {
-				[activeClassName]: isActive,
+				["text-xl font-semibold text-zinc-950"]: isActive,
 			})}
 			aria-current="page"
 		>
