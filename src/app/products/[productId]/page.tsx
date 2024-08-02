@@ -1,10 +1,10 @@
 import { type Metadata } from "next";
-import { getProductsList } from "@/api/products";
+import { getProductById, getProductsList } from "@/api/products";
 import { ProductCoverImage } from "@/ui/atoms/ProductCoverImage";
 import { ProductDetails } from "@/ui/atoms/ProductDetails";
 
 export const generateStaticParams = async () => {
-	const products = await getProductsList();
+	const { data: products } = await getProductsList();
 	return products.map((product) => ({
 		productId: product.id,
 	}));
@@ -16,22 +16,24 @@ export const generateMetadata = async ({
 	params: { productId: string };
 }): Promise<Metadata> => {
 	const product = await getProductById(params.productId);
+	const productImages = product.images[0];
 	return {
-		title: `${product.title} - Sklep internetowy`,
-		description: `${product.longDescription}`,
+		title: `${product.name} - Sklep internetowy`,
+		description: `${product.description}`,
 		openGraph: {
-			title: `${product.title} - Sklep internetowy`,
-			description: `${product.longDescription}`,
-			images: [{ url: product.image }],
+			title: `${product.name} - Sklep internetowy`,
+			description: `${product.description}`,
+			images: [{ url: productImages.url }],
 		},
 	};
 };
 
 export default async function SingleProductPage({ params }: { params: { productId: string } }) {
 	const product = await getProductById(params.productId);
+	const productImages = product.images[0];
 	return (
 		<article className="flex justify-center gap-10">
-			<ProductCoverImage productImages={product.images} />
+			<ProductCoverImage productImages={productImages} />
 			<ProductDetails product={product} />
 		</article>
 	);

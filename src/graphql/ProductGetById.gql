@@ -1,5 +1,5 @@
-query ProductGetBySlug($slug: String!) {
-	product(slug: $slug) {
+query ProductGetById($id: ID!) {
+	product(id: $id) {
 		id
 		name
 		description

@@ -278,12 +278,12 @@ export enum SortDirection {
   Desc = 'DESC'
 }
 
-export type ProductGetBySlugQueryVariables = Exact<{
-  slug: Scalars['String']['input'];
+export type ProductGetByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
 }>;
 
 
-export type ProductGetBySlugQuery = { product?: { id: string, name: string, description: string, price: number, images: Array<{ url: string, alt: string, width: number, height: number }>, categories: Array<{ name: string }> } | null };
+export type ProductGetByIdQuery = { product?: { id: string, name: string, description: string, price: number, images: Array<{ url: string, alt: string, width: number, height: number }>, categories: Array<{ name: string }> } | null };
 
 export type ProductsGetListQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']['input']>;
@@ -308,9 +308,9 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const ProductGetBySlugDocument = new TypedDocumentString(`
-    query ProductGetBySlug($slug: String!) {
-  product(slug: $slug) {
+export const ProductGetByIdDocument = new TypedDocumentString(`
+    query ProductGetById($id: ID!) {
+  product(id: $id) {
     id
     name
     description
@@ -326,7 +326,7 @@ export const ProductGetBySlugDocument = new TypedDocumentString(`
     }
   }
 }
-    `) as unknown as TypedDocumentString<ProductGetBySlugQuery, ProductGetBySlugQueryVariables>;
+    `) as unknown as TypedDocumentString<ProductGetByIdQuery, ProductGetByIdQueryVariables>;
 export const ProductsGetListDocument = new TypedDocumentString(`
     query ProductsGetList($take: Int, $skip: Int) {
   products(take: $take, skip: $skip) {

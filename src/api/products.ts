@@ -3,7 +3,7 @@ import {
 	type ProductItemType,
 	type SingleProductResponseType,
 } from "@/app/types";
-import { ProductGetBySlugDocument, ProductsGetListDocument } from "@/gql/graphql";
+import { ProductGetByIdDocument, ProductsGetListDocument } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 
 export const getProductsList = async (
@@ -39,12 +39,12 @@ export const getProductsList = async (
 	};
 };
 
-export const getProductBySlug = async (slug: string): Promise<ProductItemType> => {
-	const { product: p }: SingleProductResponseType = await executeGraphql(ProductGetBySlugDocument, {
-		slug,
+export const getProductById = async (id: string): Promise<ProductItemType> => {
+	const { product: p }: SingleProductResponseType = await executeGraphql(ProductGetByIdDocument, {
+		id,
 	});
 
-	if (!p) throw new Error(`Product not found with slug: ${slug}`);
+	if (!p) throw new Error(`Product not found with id: ${id}`);
 
 	return {
 		id: p.id,

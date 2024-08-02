@@ -1,4 +1,4 @@
-import NextImage from "next/image";
+// import NextImage from "next/image";
 import { type FC } from "react";
 
 type ProductImagesProps = {
@@ -14,7 +14,7 @@ export const ProductCoverImage: FC<ProductImagesProps> = ({
 	productImages: { url, alt, width, height },
 }) => {
 	return (
-		<NextImage
+		<img
 			src={url}
 			alt={alt}
 			width={width}
