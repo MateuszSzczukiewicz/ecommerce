@@ -16,6 +16,9 @@ export const generateMetadata = async ({
 	params: { productId: string };
 }): Promise<Metadata> => {
 	const product = await getProductById(params.productId);
+
+	if (!product) throw new Error(`Could not get product ${params.productId}`);
+
 	const productImages = product.images[0];
 	return {
 		title: `${product.name} - Sklep internetowy`,
@@ -30,10 +33,10 @@ export const generateMetadata = async ({
 
 export default async function SingleProductPage({ params }: { params: { productId: string } }) {
 	const product = await getProductById(params.productId);
-	const productImages = product.images[0];
+
 	return (
 		<article className="flex justify-center gap-10">
-			<ProductCoverImage productImages={productImages} />
+			<ProductCoverImage product={product} />
 			<ProductDetails product={product} />
 		</article>
 	);

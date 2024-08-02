@@ -1,9 +1,9 @@
 import { type FC } from "react";
-import { type ProductItemType } from "@/app/types";
 import { formatMoney } from "@/app/utils";
+import { type ProductListItemFragment } from "@/gql/graphql";
 
 type ProductListItemDescriptionProps = {
-	product: ProductItemType;
+	product: ProductListItemFragment;
 };
 
 export const ProductListItemDescription: FC<ProductListItemDescriptionProps> = ({
