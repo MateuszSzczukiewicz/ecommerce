@@ -278,6 +278,11 @@ export enum SortDirection {
   Desc = 'DESC'
 }
 
+export type CategoriesGetListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesGetListQuery = { categories: { data: Array<{ name: string, slug: string }> } };
+
 export type ProductGetByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -326,6 +331,16 @@ export const ProductListItemFragmentDoc = new TypedDocumentString(`
   }
 }
     `, {"fragmentName":"ProductListItem"}) as unknown as TypedDocumentString<ProductListItemFragment, unknown>;
+export const CategoriesGetListDocument = new TypedDocumentString(`
+    query CategoriesGetList {
+  categories {
+    data {
+      name
+      slug
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CategoriesGetListQuery, CategoriesGetListQueryVariables>;
 export const ProductGetByIdDocument = new TypedDocumentString(`
     query ProductGetById($id: ID!) {
   product(id: $id) {
