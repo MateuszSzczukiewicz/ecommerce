@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { type ReactNode } from "react";
-import { ActiveLink } from "@/ui/atoms/ActiveLink";
+import { Footer } from "@/ui/molecules/Footer";
+import { Navigation } from "@/ui/molecules/Navigation";
 
 const montserrat = Montserrat({ subsets: ["latin", "latin-ext"] });
 
@@ -19,26 +20,11 @@ export default function RootLayout({
 	return (
 		<html lang="pl">
 			<body className={montserrat.className}>
-				<nav className="sticky top-0 flex h-16 items-center justify-center bg-zinc-200 bg-opacity-60 backdrop-blur-xl">
-					<ul className="flex gap-5">
-						<li>
-							<ActiveLink href="/">Homepage</ActiveLink>
-						</li>
-						<li>
-							<ActiveLink href="/products" exact={false}>
-								Produkty
-							</ActiveLink>
-						</li>
-					</ul>
-				</nav>
-				<section className="mt-5 flex justify-center">{children}</section>
-				<footer>
-					&copy; 2023 My Website. All rights reserved.
-					<a href="https://github.com/vercel/next.js/tree/canary/examples/with-typescript">
-						Source code
-					</a>
-					|<a href="https://vercel.com">Powered by Vercel</a>
-				</footer>
+				<div className="flex min-h-screen flex-col">
+					<Navigation />
+					<main className="mt-5 flex flex-grow justify-center">{children}</main>
+					<Footer />
+				</div>
 			</body>
 		</html>
 	);
