@@ -288,7 +288,7 @@ export type ProductGetByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductGetByIdQuery = { product?: { id: string, name: string, description: string, price: number, categories: Array<{ name: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> } | null };
+export type ProductGetByIdQuery = { product?: { id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> } | null };
 
 export type ProductsGetListQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']['input']>;
@@ -296,9 +296,9 @@ export type ProductsGetListQueryVariables = Exact<{
 }>;
 
 
-export type ProductsGetListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }>, meta: { total: number } } };
+export type ProductsGetListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }>, meta: { total: number } } };
 
-export type ProductListItemFragment = { id: string, name: string, description: string, price: number, categories: Array<{ name: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> };
+export type ProductListItemFragment = { id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -322,6 +322,7 @@ export const ProductListItemFragmentDoc = new TypedDocumentString(`
   price
   categories {
     name
+    slug
   }
   images {
     url
@@ -354,6 +355,7 @@ export const ProductGetByIdDocument = new TypedDocumentString(`
   price
   categories {
     name
+    slug
   }
   images {
     url
@@ -380,6 +382,7 @@ export const ProductsGetListDocument = new TypedDocumentString(`
   price
   categories {
     name
+    slug
   }
   images {
     url

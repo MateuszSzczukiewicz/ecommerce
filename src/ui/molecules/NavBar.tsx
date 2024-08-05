@@ -13,7 +13,7 @@ export const NavBar = async () => {
 
 	const categoriesNavLinks = categoriesList.map((category) => {
 		return {
-			href: `/${category.slug}`,
+			href: `/categories/${category.slug}`,
 			label: category.name,
 			exact: false,
 		} as NavLinkType;

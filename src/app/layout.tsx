@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { type ReactNode } from "react";
 import { Footer } from "@/ui/molecules/Footer";
-import { Navigation } from "@/ui/molecules/Navigation";
+import { NavBar } from "@/ui/molecules/NavBar";
 
 const montserrat = Montserrat({ subsets: ["latin", "latin-ext"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
 		<html lang="pl">
 			<body className={montserrat.className}>
 				<div className="flex min-h-screen flex-col">
-					<Navigation />
+					<NavBar />
 					<main className="mt-5 flex flex-grow justify-center">{children}</main>
 					<Footer />
 				</div>
