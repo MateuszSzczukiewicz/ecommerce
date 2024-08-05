@@ -16,9 +16,7 @@ export const Pagination: FC<PaginationProps> = ({ currentPage, take, totalPages 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
 	const handlePageChange = (page: number) => {
-		const url = `/products/?page=${page}&take=${take}` as unknown as Parameters<
-			typeof router.push
-		>[0];
+		const url = `/products/?page=${page}&take=${take}` as Parameters<typeof router.push>[0];
 		router.push(url);
 	};
 
