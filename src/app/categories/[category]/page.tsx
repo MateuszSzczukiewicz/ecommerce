@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ProductsList } from "@/ui/organisms/ProductsList";
 import { Pagination } from "@/ui/molecules/Pagination";
 import { getProductsList } from "@/api/products";
+import { type ProductListItemFragment } from "@/gql/graphql";
 
 export default async function CategoriesPage({
 	params,
@@ -13,8 +14,13 @@ export default async function CategoriesPage({
 	const page = Number(searchParams["page"] ?? 1);
 	const take = Number(searchParams["take"] ?? 10);
 
-	const { total } = await getProductsList();
-	const totalPages = Math.ceil(total / take);
+	const { data } = await getProductsList();
+
+	const filteredProducts = data.filter((product: ProductListItemFragment) =>
+		product.categories.some((category) => category.slug === params.category),
+	);
+
+	const totalPages = Math.ceil(filteredProducts.length / take);
 
 	return (
 		<>
