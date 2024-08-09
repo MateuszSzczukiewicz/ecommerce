@@ -2,10 +2,12 @@ import {
 	ProductGetByIdDocument,
 	ProductsGetListDocument,
 	ProductsGetSuggestedDocument,
+	ProductSortBy,
+	SortDirection,
 } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 
-export const getProductsList = async (take: number = 10, skip: number = 0) => {
+export const getProductsList = async (take = 10, skip = 0) => {
 	const graphqlResponse = await executeGraphql(ProductsGetListDocument, {
 		take,
 		skip,
@@ -29,9 +31,15 @@ export const getProductById = async (id: string) => {
 	return graphqlResponse.product;
 };
 
-export const getSuggestedProductsList = async (take: number = 4) => {
+export const getSuggestedProductsList = async (
+	take = 4,
+	order = SortDirection.Desc,
+	orderBy = ProductSortBy.Rating,
+) => {
 	const graphqlResponse = await executeGraphql(ProductsGetSuggestedDocument, {
 		take,
+		order,
+		orderBy,
 	});
 
 	return graphqlResponse.products.data;

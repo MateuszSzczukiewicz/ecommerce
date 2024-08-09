@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
+import { type Route } from "next";
 
 type PaginationProps = {
 	currentPage: number;
@@ -16,7 +17,7 @@ export const Pagination: FC<PaginationProps> = ({ currentPage, take, totalPages 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
 	const handlePageChange = (page: number) => {
-		const url = `/products/?page=${page}&take=${take}` as Parameters<typeof router.push>[0];
+		const url = `/products/?page=${page}&take=${take}` as Route;
 		router.push(url);
 	};
 

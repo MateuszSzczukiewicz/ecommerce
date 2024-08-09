@@ -6,10 +6,13 @@ export const SuggestedProductsList = async () => {
 	const suggestedProducts = await getSuggestedProductsList();
 
 	return (
-		<ul className="grid grid-cols-4 gap-10">
-			{suggestedProducts.map((product: ProductListItemFragment) => (
-				<ProductsListItem key={product.id} product={product} />
-			))}
-		</ul>
+		<>
+			<h2 className="text-2xl font-semibold">Sugerowane produkty: </h2>
+			<ul className="grid grid-cols-4 gap-10">
+				{suggestedProducts.map((product: ProductListItemFragment) => (
+					<ProductsListItem key={product.id} product={product} />
+				))}
+			</ul>
+		</>
 	);
 };

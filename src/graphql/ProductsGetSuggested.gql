@@ -1,5 +1,5 @@
-query ProductsGetSuggested($take: Int) {
-	products(take: $take, order: DESC, orderBy: RATING) {
+query ProductsGetSuggested($take: Int, $order: SortDirection, $orderBy: ProductSortBy) {
+	products(take: $take, order: $order, orderBy: $orderBy) {
 		data {
 			...ProductListItem
 		}

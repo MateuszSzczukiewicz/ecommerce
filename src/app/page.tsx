@@ -1,10 +1,15 @@
+import { getCollectionsList } from "@/api/collections";
+import { CollectionsList } from "@/ui/molecules/CollectionsList";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProductsList";
 
-export default function Homepage() {
+export default async function Homepage() {
+	const collections = await getCollectionsList();
+	console.log(collections);
+
 	return (
 		<section className="flex flex-col gap-10">
-			<h1 className="text-2xl font-semibold">Sugerowane produkty: </h1>
 			<SuggestedProductsList />
+			<CollectionsList collections={collections} />
 		</section>
 	);
 }
