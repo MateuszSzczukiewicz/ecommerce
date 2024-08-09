@@ -1,5 +1,15 @@
-import { ProductsList } from "@/ui/organisms/ProductsList";
+import { getSuggestedProductsList } from "@/api/products";
+import { type ProductListItemFragment } from "@/gql/graphql";
+import { ProductsListItem } from "@/ui/molecules/ProductsListItem";
 
 export const SuggestedProductsList = async () => {
-	return <ProductsList page={1} take={4} />;
+	const suggestedProducts = await getSuggestedProductsList();
+
+	return (
+		<ul className="grid grid-cols-4 gap-10">
+			{suggestedProducts.map((product: ProductListItemFragment) => (
+				<ProductsListItem key={product.id} product={product} />
+			))}
+		</ul>
+	);
 };

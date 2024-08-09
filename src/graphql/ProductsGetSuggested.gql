@@ -1,0 +1,7 @@
+query ProductsGetSuggested($take: Int) {
+	products(take: $take, order: DESC, orderBy: RATING) {
+		data {
+			...ProductListItem
+		}
+	}
+}

@@ -1,7 +1,11 @@
-import { ProductGetByIdDocument, ProductsGetListDocument } from "@/gql/graphql";
+import {
+	ProductGetByIdDocument,
+	ProductsGetListDocument,
+	ProductsGetSuggestedDocument,
+} from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 
-export const getProductsList = async (take?: number, skip?: number) => {
+export const getProductsList = async (take: number = 10, skip: number = 0) => {
 	const graphqlResponse = await executeGraphql(ProductsGetListDocument, {
 		take,
 		skip,
@@ -23,4 +27,12 @@ export const getProductById = async (id: string) => {
 	});
 
 	return graphqlResponse.product;
+};
+
+export const getSuggestedProductsList = async (take: number = 4) => {
+	const graphqlResponse = await executeGraphql(ProductsGetSuggestedDocument, {
+		take,
+	});
+
+	return graphqlResponse.products.data;
 };

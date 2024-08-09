@@ -300,6 +300,13 @@ export type ProductsGetListQuery = { products: { data: Array<{ id: string, name:
 
 export type ProductListItemFragment = { id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> };
 
+export type ProductsGetSuggestedQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ProductsGetSuggestedQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }> } };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -391,3 +398,27 @@ export const ProductsGetListDocument = new TypedDocumentString(`
     height
   }
 }`) as unknown as TypedDocumentString<ProductsGetListQuery, ProductsGetListQueryVariables>;
+export const ProductsGetSuggestedDocument = new TypedDocumentString(`
+    query ProductsGetSuggested($take: Int) {
+  products(take: $take, order: DESC, orderBy: RATING) {
+    data {
+      ...ProductListItem
+    }
+  }
+}
+    fragment ProductListItem on Product {
+  id
+  name
+  description
+  price
+  categories {
+    name
+    slug
+  }
+  images {
+    url
+    alt
+    width
+    height
+  }
+}`) as unknown as TypedDocumentString<ProductsGetSuggestedQuery, ProductsGetSuggestedQueryVariables>;
