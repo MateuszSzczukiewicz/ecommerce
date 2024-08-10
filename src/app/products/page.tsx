@@ -11,14 +11,16 @@ export default async function ProductsPage({
 	const page = Number(searchParams["page"] ?? 1);
 	const take = Number(searchParams["take"] ?? 10);
 
-	const { total } = await getProductsList();
+	const skip = (page - 1) * take;
+
+	const { total, data: products } = await getProductsList(take, skip);
 	const totalPages = Math.ceil(total / take);
 
 	return (
 		<>
 			<ul>
 				<Suspense>
-					<ProductsList page={page} take={take} />
+					<ProductsList products={products} />
 				</Suspense>
 			</ul>
 			<Pagination currentPage={page} take={take} totalPages={totalPages} />

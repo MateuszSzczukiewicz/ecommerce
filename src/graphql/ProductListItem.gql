@@ -7,6 +7,10 @@ fragment ProductListItem on Product {
 		name
 		slug
 	}
+	collections {
+		name
+		slug
+	}
 	images {
 		url
 		alt

@@ -1,0 +1,4 @@
+fragment CategoriesListItem on Category {
+	name
+	slug
+}
