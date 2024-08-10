@@ -6,8 +6,9 @@ import {
 	SortDirection,
 } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
+import { PAGE_SIZE } from "@/app/consts";
 
-export const getProductsList = async (take = 10, skip = 0) => {
+export const getProductsList = async (take = PAGE_SIZE, skip = 0) => {
 	const graphqlResponse = await executeGraphql(ProductsGetListDocument, {
 		take,
 		skip,

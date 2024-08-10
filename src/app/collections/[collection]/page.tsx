@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ProductsList } from "@/ui/organisms/ProductsList";
 import { Pagination } from "@/ui/molecules/Pagination";
 import { getCollectionProducts } from "@/api/collections";
+import { PAGE_SIZE } from "@/app/consts";
 
 export default async function CollectionsPage({
 	params,
@@ -11,7 +12,7 @@ export default async function CollectionsPage({
 	searchParams: { [key: string]: string[] | undefined };
 }) {
 	const page = Number(searchParams["page"] ?? 1);
-	const take = Number(searchParams["take"] ?? 10);
+	const take = Number(searchParams["take"] ?? PAGE_SIZE);
 
 	const collectionProducts = await getCollectionProducts(params.collection);
 
