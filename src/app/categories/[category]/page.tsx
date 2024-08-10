@@ -20,11 +20,16 @@ export default async function CategoriesPage({
 
 	const totalPages = Math.ceil(categoryProducts.products.length / take);
 
+	const startIndex = (page - 1) * take;
+	const endIndex = startIndex + take;
+
+	const productsOnPage = categoryProducts.products.slice(startIndex, endIndex);
+
 	return (
 		<>
 			<ul>
 				<Suspense>
-					<ProductsList products={categoryProducts.products} />
+					<ProductsList products={productsOnPage} />
 				</Suspense>
 			</ul>
 			<Pagination currentPage={page} take={take} totalPages={totalPages} />
