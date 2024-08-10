@@ -26,13 +26,11 @@ export default async function CategoriesPage({
 	const productsOnPage = categoryProducts.products.slice(startIndex, endIndex);
 
 	return (
-		<>
+		<Suspense>
 			<ul>
-				<Suspense>
-					<ProductsList products={productsOnPage} />
-				</Suspense>
+				<ProductsList products={productsOnPage} />
 			</ul>
 			<Pagination currentPage={page} take={take} totalPages={totalPages} />
-		</>
+		</Suspense>
 	);
 }

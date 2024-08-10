@@ -19,12 +19,12 @@ export default async function ProductsPage({
 
 	return (
 		<>
-			<ul>
-				<Suspense>
+			<Suspense>
+				<ul>
 					<ProductsList products={products} />
-				</Suspense>
-			</ul>
-			<Pagination currentPage={page} take={take} totalPages={totalPages} />
+				</ul>
+				<Pagination currentPage={page} take={take} totalPages={totalPages} />
+			</Suspense>
 		</>
 	);
 }
