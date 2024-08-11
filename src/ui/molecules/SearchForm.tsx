@@ -44,7 +44,7 @@ export const SearchForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit} className="flex items-center space-x-4">
-			{error && <p className="mt-2 text-red-500">{error}</p>}
+			{error && <p>{error}</p>}
 			<input
 				type="search"
 				value={searchQuery}

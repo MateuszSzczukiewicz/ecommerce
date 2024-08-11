@@ -15,6 +15,14 @@ export default async function SearchPage({
 
 	const skip = (page - 1) * take;
 
+	if (searchTerm.length < 2) {
+		return (
+			<>
+				<p>Search query must be at least 2 characters long.</p>
+			</>
+		);
+	}
+
 	const { total, data: products } = await getProductsSearchList(take, skip, searchTerm);
 	const totalPages = Math.ceil(total / take);
 
