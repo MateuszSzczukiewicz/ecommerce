@@ -1,0 +1,10 @@
+query ProductsSearchList($take: Int, $skip: Int, $searchTerm: String!) {
+	products(take: $take, skip: $skip, search: $searchTerm) {
+		data {
+			...ProductListItem
+		}
+		meta {
+			total
+		}
+	}
+}

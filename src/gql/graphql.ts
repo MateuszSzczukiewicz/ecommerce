@@ -332,6 +332,15 @@ export type ProductsGetSuggestedQueryVariables = Exact<{
 
 export type ProductsGetSuggestedQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, collections: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }> } };
 
+export type ProductsSearchListQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  searchTerm: Scalars['String']['input'];
+}>;
+
+
+export type ProductsSearchListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, collections: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> }>, meta: { total: number } } };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -594,3 +603,34 @@ export const ProductsGetSuggestedDocument = new TypedDocumentString(`
     height
   }
 }`) as unknown as TypedDocumentString<ProductsGetSuggestedQuery, ProductsGetSuggestedQueryVariables>;
+export const ProductsSearchListDocument = new TypedDocumentString(`
+    query ProductsSearchList($take: Int, $skip: Int, $searchTerm: String!) {
+  products(take: $take, skip: $skip, search: $searchTerm) {
+    data {
+      ...ProductListItem
+    }
+    meta {
+      total
+    }
+  }
+}
+    fragment ProductListItem on Product {
+  id
+  name
+  description
+  price
+  categories {
+    name
+    slug
+  }
+  collections {
+    name
+    slug
+  }
+  images {
+    url
+    alt
+    width
+    height
+  }
+}`) as unknown as TypedDocumentString<ProductsSearchListQuery, ProductsSearchListQueryVariables>;

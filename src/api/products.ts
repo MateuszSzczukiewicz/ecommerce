@@ -3,6 +3,7 @@ import {
 	ProductsGetListDocument,
 	ProductsGetSuggestedDocument,
 	ProductSortBy,
+	ProductsSearchListDocument,
 	SortDirection,
 } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
@@ -44,4 +45,21 @@ export const getSuggestedProductsList = async (
 	});
 
 	return graphqlResponse.products.data;
+};
+
+export const getProductsSearchList = async (take = PAGE_SIZE, skip = 0, searchTerm: string) => {
+	const graphqlResponse = await executeGraphql(ProductsSearchListDocument, {
+		take,
+		skip,
+		searchTerm,
+	});
+
+	const data = graphqlResponse.products.data;
+
+	const total = graphqlResponse.products.meta.total;
+
+	return {
+		data,
+		total,
+	};
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FC } from "react";
 import { type Route } from "next";
 import { PaginationArrowButton } from "@/ui/atoms/PaginationArrowButton";
@@ -16,9 +16,18 @@ export const Pagination: FC<PaginationProps> = ({ currentPage, take, totalPages 
 	const router = useRouter();
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 	const pathname = usePathname();
+	const params = useSearchParams();
 
 	const handlePageChange = (page: number) => {
-		const url = `${pathname}?page=${page}&take=${take}`;
+		let url: string;
+		if (!params || !params.toString()) {
+			url = `${pathname}?page=${page}&take=${take}`;
+		} else {
+			const searchParams = new URLSearchParams(params.toString());
+			searchParams.set("page", page.toString());
+			searchParams.set("take", take.toString());
+			url = `${pathname}?${searchParams.toString()}`;
+		}
 		router.push(url as Route);
 	};
 
