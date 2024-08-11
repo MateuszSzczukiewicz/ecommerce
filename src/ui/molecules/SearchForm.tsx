@@ -1,26 +1,46 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, type FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useCallback, useState } from "react";
 
 export const SearchForm = () => {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
+	const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 	const router = useRouter();
 
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setSearchQuery(e.target.value);
-		setError(null);
-	};
+	const handleInputChange = useCallback(
+		(e: ChangeEvent<HTMLInputElement>) => {
+			const newValue = e.target.value;
+			setSearchQuery(newValue);
+			if (error) setError(null);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		if (searchQuery.length < 2) {
-			setError("Search query must be at least 2 characters long.");
-			return;
-		}
-		router.push(`/search?query=${searchQuery}`);
-	};
+			if (debounceTimeout) {
+				clearTimeout(debounceTimeout);
+			}
+
+			const timeout = setTimeout(() => {
+				if (newValue.length >= 2) {
+					router.push(`/search?query=${newValue}`);
+				}
+			}, 500);
+
+			setDebounceTimeout(timeout);
+		},
+		[error, debounceTimeout, router],
+	);
+
+	const handleSubmit = useCallback(
+		(e: FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			if (searchQuery.length < 2) {
+				setError("Search query must be at least 2 characters long.");
+				return;
+			}
+			router.push(`/search?query=${searchQuery}`);
+		},
+		[searchQuery, router],
+	);
 
 	return (
 		<form onSubmit={handleSubmit} className="flex items-center space-x-4">
