@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { type ReactNode } from "react";
 import { Footer } from "@/ui/molecules/Footer";
-import { NavBar } from "@/ui/molecules/NavBar";
+import { NavBar } from "@/ui/organisms/NavBar";
 
 const montserrat = Montserrat({ subsets: ["latin", "latin-ext"] });
 

@@ -8,7 +8,7 @@ type NavLinkType = {
 	exact?: boolean;
 };
 
-export const NavBar = async () => {
+export const NavLinks = async () => {
 	const categoriesList = await getCategoriesList();
 
 	const categoriesNavLinks = categoriesList.map((category) => {
@@ -26,16 +26,14 @@ export const NavBar = async () => {
 	];
 
 	return (
-		<nav className="sticky top-0 flex items-center justify-center bg-zinc-200 bg-opacity-60 p-5 backdrop-blur-xl">
-			<ul className="flex gap-5">
-				{navLinks.map((link) => (
-					<li key={link.href}>
-						<ActiveLink href={link.href} exact={link.exact}>
-							{link.label}
-						</ActiveLink>
-					</li>
-				))}
-			</ul>
-		</nav>
+		<ul className="flex gap-5">
+			{navLinks.map((link) => (
+				<li key={link.href}>
+					<ActiveLink href={link.href} exact={link.exact}>
+						{link.label}
+					</ActiveLink>
+				</li>
+			))}
+		</ul>
 	);
 };

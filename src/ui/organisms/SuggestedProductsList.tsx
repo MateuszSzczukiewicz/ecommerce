@@ -6,7 +6,7 @@ export const SuggestedProductsList = async () => {
 
 	return (
 		<>
-			<h2 className="text-2xl font-semibold">Sugerowane produkty: </h2>
+			<h2 className="text-2xl font-semibold">Suggested products: </h2>
 			<ProductsList products={suggestedProducts} />
 		</>
 	);

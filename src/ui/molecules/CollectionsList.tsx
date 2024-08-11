@@ -11,7 +11,7 @@ type CollectionsListProps = {
 export const CollectionsList: FC<CollectionsListProps> = ({ collections }) => {
 	return (
 		<>
-			<h2 className="text-2xl font-semibold">Nasze kolekcje:</h2>
+			<h2 className="text-2xl font-semibold">Our collections:</h2>
 			<ul className="flex justify-between">
 				<Suspense>
 					{collections.map((collection) => (
