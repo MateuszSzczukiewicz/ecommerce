@@ -2,32 +2,32 @@
 
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, type FormEvent, useCallback, useState } from "react";
+import { useDebounce } from "@/app/hooks/useDebounce";
 
 export const SearchForm = () => {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
-	const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 	const router = useRouter();
+
+	const handleSearch = useCallback(
+		(query: string) => {
+			if (query.length >= 2) {
+				router.push(`/search?query=${query}`);
+			}
+		},
+		[router],
+	);
+
+	const debouncedHandleSearch = useDebounce(handleSearch, 500);
 
 	const handleInputChange = useCallback(
 		(e: ChangeEvent<HTMLInputElement>) => {
 			const newValue = e.target.value;
 			setSearchQuery(newValue);
 			if (error) setError(null);
-
-			if (debounceTimeout) {
-				clearTimeout(debounceTimeout);
-			}
-
-			const timeout = setTimeout(() => {
-				if (newValue.length >= 2) {
-					router.push(`/search?query=${newValue}`);
-				}
-			}, 500);
-
-			setDebounceTimeout(timeout);
+			debouncedHandleSearch(newValue);
 		},
-		[error, debounceTimeout, router],
+		[error, debouncedHandleSearch],
 	);
 
 	const handleSubmit = useCallback(
