@@ -1,0 +1,9 @@
+fragment CartListItem on Cart {
+	id
+	items {
+		product {
+			...ProductListItem
+		}
+		quantity
+	}
+}

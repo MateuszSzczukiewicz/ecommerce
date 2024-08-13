@@ -1,8 +1,7 @@
 import { type FC } from "react";
 import { formatMoney } from "@/app/utils";
-import { CartGetByIdDocument, type ProductListItemFragment } from "@/gql/graphql";
-import { cookies } from "next/headers";
-import { executeGraphql } from "@/api/graphqlApi";
+import { type ProductListItemFragment } from "@/gql/graphql";
+import { addToCart, getOrCreateCart } from "@/api/carts";
 
 type ProductDetailsProps = {
 	product: ProductListItemFragment;
@@ -10,14 +9,10 @@ type ProductDetailsProps = {
 
 export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 	async function addProductToCartAction(formData: FormData) {
-		"use  server";
+		"use server";
 		const cart = await getOrCreateCart();
-        cookies.().set("cartId", cart.id, {
-            httpOnly: true,
-            sameSite: "lax",
-            // secure: true
-        });
-		await addToCart(cart.id, product.productId);
+
+		await addToCart(cart.id, product.id);
 	}
 
 	return (
@@ -37,42 +32,3 @@ export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 		</div>
 	);
 };
-
-async function getOrCreateCart(): Promise<CartFragment> {
-	const cartId = cookies().get("cartId")?.value;
-	if (cartId) {
-		const cart = await getCartById(cartId);
-		if (cart.order) {
-			return cart.order;
-		}
-	}
-
-	const cart = await createCart();
-	if (!cart.createOrder) {
-		throw new Error("Failed to create cart");
-	}
-	return cart.createOrder;
-}
-
-async function getCartById(cartId: string) {
-	executeGraphql(CartGetByIdDocument, { id: cartId });
-}
-
-async function createCart() {
-	return executeGraphql(CartCreateDocument, {});
-}
-
-function addToCart(orderId: string, productId: string) {
-    const product = await executeGraphql(ProductGetById, {
-        id: productId
-    })
-    if(!product.product) {
-        throw new Error("Product not found")
-    }
-
-    await executeGraphql(CartAddProductDocument, {
-        orderId,
-        productId,
-        total: product.product.price
-    });
-}
