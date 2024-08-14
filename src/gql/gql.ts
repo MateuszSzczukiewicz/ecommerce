@@ -17,7 +17,7 @@ const documents = {
     "mutation CartAddProduct($cartId: ID!, $item: CartItemInput!) {\n  cartAddItem(id: $cartId, input: {item: $item}) {\n    id\n    ...CartListItem\n  }\n}": types.CartAddProductDocument,
     "mutation CartFindOrCreate($id: ID, $items: [CartItemInput!]!) {\n  cartFindOrCreate(id: $id, input: {items: $items}) {\n    ...CartListItem\n  }\n}": types.CartFindOrCreateDocument,
     "query CartGetById($id: ID!) {\n  cart(id: $id) {\n    ...CartListItem\n  }\n}": types.CartGetByIdDocument,
-    "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      ...ProductListItem\n    }\n    quantity\n  }\n}": types.CartListItemFragmentDoc,
+    "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      id\n      name\n      price\n    }\n    quantity\n  }\n}": types.CartListItemFragmentDoc,
     "query CategoriesGetList {\n  categories {\n    data {\n      ...CategoriesListItem\n    }\n  }\n}": types.CategoriesGetListDocument,
     "query CategoriesGetProducts($slug: String!) {\n  category(slug: $slug) {\n    products {\n      ...ProductListItem\n    }\n  }\n}": types.CategoriesGetProductsDocument,
     "fragment CategoriesListItem on Category {\n  name\n  slug\n}": types.CategoriesListItemFragmentDoc,
@@ -46,7 +46,7 @@ export function graphql(source: "query CartGetById($id: ID!) {\n  cart(id: $id) 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      ...ProductListItem\n    }\n    quantity\n  }\n}"): typeof import('./graphql').CartListItemFragmentDoc;
+export function graphql(source: "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      id\n      name\n      price\n    }\n    quantity\n  }\n}"): typeof import('./graphql').CartListItemFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,4 +1,4 @@
-import { CartFindOrCreateDocument, CartItemInput } from "./../gql/graphql";
+import { CartFindOrCreateDocument, CartItemInput } from "../gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
 import { cookies } from "next/headers";

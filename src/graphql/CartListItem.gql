@@ -2,7 +2,9 @@ fragment CartListItem on Cart {
 	id
 	items {
 		product {
-			...ProductListItem
+			id
+			name
+			price
 		}
 		quantity
 	}

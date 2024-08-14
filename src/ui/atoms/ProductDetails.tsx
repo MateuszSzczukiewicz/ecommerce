@@ -1,7 +1,8 @@
 import { type FC } from "react";
 import { formatMoney } from "@/app/utils";
 import { type ProductListItemFragment } from "@/gql/graphql";
-import { addToCart } from "@/api/carts";
+import { AddToCartButton } from "@/ui/atoms/AddToCartButton";
+import { addToCart } from "@/api/cart";
 
 type ProductDetailsProps = {
 	product: ProductListItemFragment;
@@ -20,13 +21,7 @@ export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 			<p className="text-xl font-semibold">{formatMoney(product.price / 100)}</p>
 			<p className="text-lg">{product.description}</p>
 			<form action={addProductToCartAction}>
-				<input type="hidden" name="productId" value={product.id} />
-				<button
-					type="submit"
-					className="w-full rounded-md border bg-slate-700 px-8 py-3 text-white"
-				>
-					Add to cart
-				</button>
+				<AddToCartButton />
 			</form>
 		</div>
 	);
