@@ -1,19 +1,17 @@
 import { type FC } from "react";
 import { formatMoney } from "@/app/utils";
 import { type ProductListItemFragment } from "@/gql/graphql";
-import { addToCart, getOrCreateCart } from "@/api/carts";
+import { addToCart } from "@/api/carts";
 
 type ProductDetailsProps = {
 	product: ProductListItemFragment;
 };
 
 export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
-	async function addProductToCartAction(formData: FormData) {
+	const addProductToCartAction = async () => {
 		"use server";
-		const cart = await getOrCreateCart();
-
-		await addToCart(cart.id, product.id);
-	}
+		await addToCart(product.id);
+	};
 
 	return (
 		<div className="flex w-1/3 flex-col gap-5">
