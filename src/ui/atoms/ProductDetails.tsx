@@ -10,7 +10,8 @@ type ProductDetailsProps = {
 export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 	const addProductToCartAction = async () => {
 		"use server";
-		await addToCart(product.id);
+		const productId = product.id;
+		await addToCart({ productId });
 	};
 
 	return (
