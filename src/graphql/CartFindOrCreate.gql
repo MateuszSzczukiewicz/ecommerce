@@ -1,5 +1,13 @@
 mutation CartFindOrCreate($id: ID, $items: [CartItemInput!]!) {
 	cartFindOrCreate(id: $id, input: { items: $items }) {
-		...CartListItem
+		id
+		items {
+			product {
+				id
+				name
+				price
+			}
+			quantity
+		}
 	}
 }

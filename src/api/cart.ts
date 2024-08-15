@@ -4,7 +4,16 @@ import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
 import { cookies } from "next/headers";
 
 export const getCartById = async (cartId: string) => {
-	return executeGraphql(CartGetByIdDocument, { id: cartId });
+	try {
+		const response = await executeGraphql(CartGetByIdDocument, { id: cartId });
+		if (!response || !response.cart) {
+			throw new Error("Failed to fetch cart data");
+		}
+		return response.cart;
+	} catch (err) {
+		console.error("Error fetching cart by id:", err);
+		throw new Error(`Could not retrieve cart with ID ${cartId}`);
+	}
 };
 
 export const findOrCreateCart = async () => {
@@ -12,7 +21,7 @@ export const findOrCreateCart = async () => {
 
 	if (cartId) {
 		try {
-			const { cart } = await getCartById(cartId);
+			const cart = await getCartById(cartId);
 
 			if (!cart) throw new Error("Cart not found");
 
@@ -23,37 +32,69 @@ export const findOrCreateCart = async () => {
 					quantity,
 				})),
 			});
+
+			if (!response || !response.cartFindOrCreate) {
+				throw new Error("Failed to create or update cart");
+			}
+
 			return response.cartFindOrCreate;
 		} catch (err) {
-			console.error("Error fetching cart by id", err);
+			console.error("Error fetching or updating cart by id:", err);
 			cookies().delete("cartId");
+			throw new Error("Failed to fetch or update cart, deleted cartId cookie");
 		}
 	}
 
-	const createCartResponse = await executeGraphql(CartFindOrCreateDocument, {
-		items: [],
-	});
+	try {
+		const createCartResponse = await executeGraphql(CartFindOrCreateDocument, {
+			items: [],
+		});
 
-	const newCart = createCartResponse.cartFindOrCreate;
+		if (!createCartResponse || !createCartResponse.cartFindOrCreate) {
+			throw new Error("Failed to create a new cart");
+		}
 
-	cookies().set("cartId", newCart.id, {
-		httpOnly: true,
-		sameSite: "lax",
-	});
+		const newCart = createCartResponse.cartFindOrCreate;
 
-	return newCart;
+		cookies().set("cartId", newCart.id, {
+			maxAge: 60 * 60 * 24 * 365,
+			expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+			// path: "/",
+			// domain: "example.com",
+			httpOnly: true,
+			// secure: true,
+			sameSite: "lax",
+			priority: "low",
+		});
+
+		return newCart;
+	} catch (err) {
+		console.error("Error creating cart:", err);
+		throw new Error("Unable to create a new cart");
+	}
 };
 
 export const addToCart = async ({ productId, quantity }: CartItemInput) => {
-	const cartId = (await findOrCreateCart()).id;
+	try {
+		const cartId = (await findOrCreateCart()).id;
 
-	const item = {
-		productId,
-		quantity,
-	};
+		const item = {
+			productId,
+			quantity,
+		};
 
-	await executeGraphql(CartAddProductDocument, {
-		cartId,
-		item,
-	});
+		const response = await executeGraphql(CartAddProductDocument, {
+			cartId,
+			item,
+		});
+
+		if (!response || !response.cartAddItem) {
+			throw new Error("Failed to add item to cart");
+		}
+
+		return response.cartAddItem;
+	} catch (err) {
+		console.error("Error adding product to cart:", err);
+		throw new Error(`Unable to add product to cart: ${err}`);
+	}
 };
