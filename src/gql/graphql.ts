@@ -26,7 +26,9 @@ export type Cart = {
 };
 
 export type CartItem = {
+  id: Scalars['ID']['output'];
   product: Product;
+  productId: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
 };
 
@@ -62,9 +64,7 @@ export type CollectionList = {
 };
 
 export type ListMeta = {
-  /** The total number of items matching the query */
   count: Scalars['Int']['output'];
-  /** The total number of items in the database */
   total: Scalars['Int']['output'];
 };
 
@@ -119,7 +119,8 @@ export type MutationReviewCreateArgs = {
 };
 
 export type MutationCartAddItemInput = {
-  item: CartItemInput;
+  productId: Scalars['String']['input'];
+  quantity?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationCartFindOrCreateInput = {
@@ -142,20 +143,21 @@ export type OrderList = {
 
 export enum OrderSortBy {
   Default = 'DEFAULT',
-  Status = 'STATUS',
-  Total = 'TOTAL'
+  Name = 'NAME',
+  Price = 'PRICE',
+  Rating = 'RATING'
 }
 
 export enum OrderStatus {
   Cancelled = 'CANCELLED',
-  Created = 'CREATED',
-  Fulfilled = 'FULFILLED',
-  Paid = 'PAID'
+  Completed = 'COMPLETED',
+  Pending = 'PENDING'
 }
 
 export type Product = {
   categories: Array<Category>;
   collections: Array<Collection>;
+  createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   images: Array<ProductImage>;
@@ -164,12 +166,15 @@ export type Product = {
   rating?: Maybe<Scalars['Float']['output']>;
   reviews: Array<Review>;
   slug: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ProductImage = {
   alt: Scalars['String']['output'];
   height: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
+  product: Product;
+  productId: Scalars['ID']['output'];
   url: Scalars['String']['output'];
   width: Scalars['Int']['output'];
 };
@@ -192,9 +197,9 @@ export type Query = {
   category?: Maybe<Category>;
   collection?: Maybe<Collection>;
   collections: CollectionList;
-  order?: Maybe<Order>;
+  order: Order;
   orders: OrderList;
-  product?: Maybe<Product>;
+  product: Product;
   products: ProductList;
 };
 
@@ -263,14 +268,10 @@ export type Review = {
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   product: Product;
+  productId: Scalars['ID']['output'];
   rating: Scalars['Float']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
-};
-
-export type ReviewList = {
-  data: Array<Review>;
-  meta: ListMeta;
 };
 
 export enum SortDirection {
@@ -279,8 +280,8 @@ export enum SortDirection {
 }
 
 export type CartAddProductMutationVariables = Exact<{
-  cartId: Scalars['ID']['input'];
-  item: CartItemInput;
+  cartAddItemId: Scalars['ID']['input'];
+  input: MutationCartAddItemInput;
 }>;
 
 
@@ -336,7 +337,7 @@ export type ProductGetByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductGetByIdQuery = { product?: { id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, collections: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> } | null };
+export type ProductGetByIdQuery = { product: { id: string, name: string, description: string, price: number, categories: Array<{ name: string, slug: string }>, collections: Array<{ name: string, slug: string }>, images: Array<{ url: string, alt: string, width: number, height: number }> } };
 
 export type ProductsGetListQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']['input']>;
@@ -452,9 +453,8 @@ export const CollectionListItemFragmentDoc = new TypedDocumentString(`
   }
 }`, {"fragmentName":"CollectionListItem"}) as unknown as TypedDocumentString<CollectionListItemFragment, unknown>;
 export const CartAddProductDocument = new TypedDocumentString(`
-    mutation CartAddProduct($cartId: ID!, $item: CartItemInput!) {
-  cartAddItem(id: $cartId, input: {item: $item}) {
-    id
+    mutation CartAddProduct($cartAddItemId: ID!, $input: MutationCartAddItemInput!) {
+  cartAddItem(id: $cartAddItemId, input: $input) {
     ...CartListItem
   }
 }
@@ -472,20 +472,18 @@ export const CartAddProductDocument = new TypedDocumentString(`
 export const CartFindOrCreateDocument = new TypedDocumentString(`
     mutation CartFindOrCreate($id: ID, $items: [CartItemInput!]!) {
   cartFindOrCreate(id: $id, input: {items: $items}) {
-    ...CartListItem
+    id
+    items {
+      product {
+        id
+        name
+        price
+      }
+      quantity
+    }
   }
 }
-    fragment CartListItem on Cart {
-  id
-  items {
-    product {
-      id
-      name
-      price
-    }
-    quantity
-  }
-}`) as unknown as TypedDocumentString<CartFindOrCreateMutation, CartFindOrCreateMutationVariables>;
+    `) as unknown as TypedDocumentString<CartFindOrCreateMutation, CartFindOrCreateMutationVariables>;
 export const CartGetByIdDocument = new TypedDocumentString(`
     query CartGetById($id: ID!) {
   cart(id: $id) {

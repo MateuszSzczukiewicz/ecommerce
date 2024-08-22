@@ -10,7 +10,7 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "static-ourstore.hyperfunctor.com",
+				hostname: "loremflickr.com",
 			},
 		],
 	},

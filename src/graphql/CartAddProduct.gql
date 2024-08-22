@@ -1,6 +1,5 @@
-mutation CartAddProduct($cartId: ID!, $item: CartItemInput!) {
-	cartAddItem(id: $cartId, input: { item: $item }) {
-		id
+mutation CartAddProduct($cartAddItemId: ID!, $input: MutationCartAddItemInput!) {
+	cartAddItem(id: $cartAddItemId, input: $input) {
 		...CartListItem
 	}
 }

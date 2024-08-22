@@ -69,23 +69,28 @@ export const findOrCreateCart = async () => {
 
 		return newCart;
 	} catch (err) {
-		console.error("Error creating cart:", err);
-		throw new Error("Unable to create a new cart");
+		console.error("Error fetching or updating cart by id:", err);
+		try {
+			cookies().delete("cartId");
+		} catch (deleteErr) {
+			console.error("Failed to delete cartId cookie:", deleteErr);
+		}
+		throw new Error("Failed to fetch or update cart, deleted cartId cookie");
 	}
 };
 
 export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 	try {
-		const cartId = (await findOrCreateCart()).id;
+		const cartAddItemId = (await findOrCreateCart()).id;
 
-		const item = {
+		const input = {
 			productId,
 			quantity,
 		};
 
 		const response = await executeGraphql(CartAddProductDocument, {
-			cartId,
-			item,
+			cartAddItemId,
+			input,
 		});
 
 		if (!response || !response.cartAddItem) {
