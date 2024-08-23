@@ -16,35 +16,8 @@ export const getCartById = async (cartId: string) => {
 	}
 };
 
-export const findOrCreateCart = async () => {
-	const cartId = cookies().get("cartId")?.value;
-
-	if (cartId) {
-		try {
-			const cart = await getCartById(cartId);
-
-			if (!cart) throw new Error("Cart not found");
-
-			const response = await executeGraphql(CartFindOrCreateDocument, {
-				id: cart.id,
-				items: cart.items.map(({ product, quantity }) => ({
-					productId: product.id,
-					quantity,
-				})),
-			});
-
-			if (!response || !response.cartFindOrCreate) {
-				throw new Error("Failed to create or update cart");
-			}
-
-			return response.cartFindOrCreate;
-		} catch (err) {
-			console.error("Error fetching or updating cart by id:", err);
-			cookies().delete("cartId");
-			throw new Error("Failed to fetch or update cart, deleted cartId cookie");
-		}
-	}
-
+const createNewCart = async () => {
+	"use server";
 	try {
 		const createCartResponse = await executeGraphql(CartFindOrCreateDocument, {
 			items: [],
@@ -59,24 +32,48 @@ export const findOrCreateCart = async () => {
 		cookies().set("cartId", newCart.id, {
 			maxAge: 60 * 60 * 24 * 365,
 			expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-			// path: "/",
-			// domain: "example.com",
 			httpOnly: true,
-			// secure: true,
 			sameSite: "lax",
 			priority: "low",
 		});
 
 		return newCart;
 	} catch (err) {
-		console.error("Error fetching or updating cart by id:", err);
-		try {
-			cookies().delete("cartId");
-		} catch (deleteErr) {
-			console.error("Failed to delete cartId cookie:", deleteErr);
-		}
-		throw new Error("Failed to fetch or update cart, deleted cartId cookie");
+		console.error("Error creating new cart:", err);
+		throw new Error("Failed to create a new cart");
 	}
+};
+
+export const findOrCreateCart = async () => {
+	const cartId = cookies().get("cartId")?.value;
+
+	if (cartId) {
+		try {
+			const cart = await getCartById(cartId);
+
+			if (!cart) {
+				cookies().delete("cartId");
+				return await createNewCart();
+			}
+
+			const response = await executeGraphql(CartFindOrCreateDocument, {
+				id: cart.id,
+				items: [],
+			});
+
+			if (!response || !response.cartFindOrCreate) {
+				throw new Error("Failed to create or update cart");
+			}
+
+			return response.cartFindOrCreate;
+		} catch (err) {
+			console.error("Error fetching or updating cart by id:", err);
+			cookies().delete("cartId");
+			throw new Error("Failed to fetch or update cart, deleted cartId cookie");
+		}
+	}
+
+	return await createNewCart();
 };
 
 export const addToCart = async ({ productId, quantity }: CartItemInput) => {

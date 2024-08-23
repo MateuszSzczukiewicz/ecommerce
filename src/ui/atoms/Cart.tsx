@@ -1,11 +1,20 @@
+import { findOrCreateCart } from "@/api/cart";
 import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const Cart = () => {
+	const handleCreateOrFindCart = async () => {
+		"use server";
+		await findOrCreateCart();
+		redirect("/cart");
+	};
+
 	return (
-		<Link href={{ pathname: "/cart" }} className="flex items-center justify-center gap-2">
-			<ShoppingCart />
-			<span className="text-lg font-semibold">0</span>
-		</Link>
+		<form action={handleCreateOrFindCart}>
+			<button type="submit" className="flex gap-3">
+				<ShoppingCart />
+				<span className="text-lg font-semibold">0</span>
+			</button>
+		</form>
 	);
 };
