@@ -11,6 +11,9 @@ export const getCartById = async (cartId: string) => {
 		const response = await executeGraphql({
 			query: CartGetByIdDocument,
 			variables: { id: cartId },
+			next: {
+				tags: ["cart"],
+			},
 		});
 		if (!response || !response.cart) {
 			throw new Error("Failed to fetch cart data");
@@ -28,6 +31,9 @@ const createNewCart = async () => {
 		const createCartResponse = await executeGraphql({
 			query: CartFindOrCreateDocument,
 			variables: { items: [] },
+			next: {
+				tags: ["cart"],
+			},
 		});
 
 		if (!createCartResponse || !createCartResponse.cartFindOrCreate) {
@@ -66,6 +72,9 @@ export const findOrCreateCart = async () => {
 			const response = await executeGraphql({
 				query: CartFindOrCreateDocument,
 				variables: { id: cart.id, items: [] },
+				next: {
+					tags: ["cart"],
+				},
 			});
 
 			if (!response || !response.cartFindOrCreate) {
@@ -92,6 +101,9 @@ export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 		const response = await executeGraphql({
 			query: CartAddProductDocument,
 			variables: { cartAddItemId, input },
+			next: {
+				tags: ["cart"],
+			},
 		});
 
 		if (!response || !response.cartAddItem) {
@@ -110,5 +122,8 @@ export const changeItemQuantity = async (productId: string, quantity: number) =>
 	await executeGraphql({
 		query: CartSetProductQuantityDocument,
 		variables: { cartId, productId, quantity },
+		next: {
+			tags: ["cart"],
+		},
 	});
 };

@@ -3,6 +3,7 @@ import { formatMoney } from "@/app/utils";
 import { type ProductListItemFragment } from "@/gql/graphql";
 import { AddToCartButton } from "@/ui/atoms/AddToCartButton";
 import { addToCart } from "@/api/cart";
+import { revalidateTag } from "next/cache";
 
 type ProductDetailsProps = {
 	product: ProductListItemFragment;
@@ -13,6 +14,7 @@ export const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 		"use server";
 		const productId = product.id;
 		await addToCart({ productId });
+		revalidateTag("cart");
 	};
 
 	return (
