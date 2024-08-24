@@ -1,11 +1,17 @@
+"use server";
+
 import { CartFindOrCreateDocument, CartItemInput } from "../gql/graphql";
+import { CartSetProductQuantityDocument } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
 import { cookies } from "next/headers";
 
 export const getCartById = async (cartId: string) => {
 	try {
-		const response = await executeGraphql(CartGetByIdDocument, { id: cartId });
+		const response = await executeGraphql({
+			query: CartGetByIdDocument,
+			variables: { id: cartId },
+		});
 		if (!response || !response.cart) {
 			throw new Error("Failed to fetch cart data");
 		}
@@ -19,8 +25,9 @@ export const getCartById = async (cartId: string) => {
 const createNewCart = async () => {
 	"use server";
 	try {
-		const createCartResponse = await executeGraphql(CartFindOrCreateDocument, {
-			items: [],
+		const createCartResponse = await executeGraphql({
+			query: CartFindOrCreateDocument,
+			variables: { items: [] },
 		});
 
 		if (!createCartResponse || !createCartResponse.cartFindOrCreate) {
@@ -56,9 +63,9 @@ export const findOrCreateCart = async () => {
 				return await createNewCart();
 			}
 
-			const response = await executeGraphql(CartFindOrCreateDocument, {
-				id: cart.id,
-				items: [],
+			const response = await executeGraphql({
+				query: CartFindOrCreateDocument,
+				variables: { id: cart.id, items: [] },
 			});
 
 			if (!response || !response.cartFindOrCreate) {
@@ -80,14 +87,11 @@ export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 	try {
 		const cartAddItemId = (await findOrCreateCart()).id;
 
-		const input = {
-			productId,
-			quantity,
-		};
+		const input = { productId, quantity };
 
-		const response = await executeGraphql(CartAddProductDocument, {
-			cartAddItemId,
-			input,
+		const response = await executeGraphql({
+			query: CartAddProductDocument,
+			variables: { cartAddItemId, input },
 		});
 
 		if (!response || !response.cartAddItem) {
@@ -99,4 +103,12 @@ export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 		console.error("Error adding product to cart:", err);
 		throw new Error(`Unable to add product to cart: ${err}`);
 	}
+};
+
+export const changeItemQuantity = async (productId: string, quantity: number) => {
+	const cartId = (await findOrCreateCart()).id;
+	await executeGraphql({
+		query: CartSetProductQuantityDocument,
+		variables: { cartId, productId, quantity },
+	});
 };

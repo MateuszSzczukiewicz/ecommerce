@@ -1,5 +1,6 @@
 import { findOrCreateCart } from "@/api/cart";
 import { formatMoney } from "@/app/utils";
+import { IncrementProductQuantityButton } from "@/ui/atoms/IncrementProductQuantityButton";
 import { redirect } from "next/navigation";
 
 export default async function CartPage() {
@@ -21,15 +22,17 @@ export default async function CartPage() {
 					</tr>
 				</thead>
 				<tbody>
-					{cart.items.map((item) => {
-						if (!item.product) {
+					{cart.items.map(({ product, quantity }) => {
+						if (!product) {
 							return null;
 						}
 						return (
-							<tr key={item.product.id}>
-								<td>{item.product.name}</td>
-								<td className="text-center">{item.quantity}</td>
-								<td>{formatMoney(item.product.price / 100)}</td>
+							<tr key={product.id}>
+								<td>{product.name}</td>
+								<td className="text-center">
+									<IncrementProductQuantityButton quantity={quantity} productId={product.id} />
+								</td>
+								<td>{formatMoney(product.price / 100)}</td>
 							</tr>
 						);
 					})}
