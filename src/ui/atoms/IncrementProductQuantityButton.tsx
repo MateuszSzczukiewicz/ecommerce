@@ -21,8 +21,6 @@ export const IncrementProductQuantityButton = ({
 		await changeItemQuantity(productId, updatedQuantity);
 	};
 
-	console.log(optimisticQuantity);
-
 	return (
 		<form className="flex">
 			<span className="w-8 text-center">{optimisticQuantity}</span>

@@ -18,6 +18,7 @@ const documents = {
     "mutation CartFindOrCreate($id: ID, $items: [CartItemInput!]!) {\n  cartFindOrCreate(id: $id, input: {items: $items}) {\n    id\n    items {\n      product {\n        id\n        name\n        price\n      }\n      quantity\n    }\n  }\n}": types.CartFindOrCreateDocument,
     "query CartGetById($id: ID!) {\n  cart(id: $id) {\n    ...CartListItem\n  }\n}": types.CartGetByIdDocument,
     "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      id\n      name\n      price\n    }\n    quantity\n  }\n}": types.CartListItemFragmentDoc,
+    "mutation CartRemoveProduct($cartId: ID!, $productId: ID!) {\n  cartRemoveItem(id: $cartId, productId: $productId) {\n    id\n  }\n}": types.CartRemoveProductDocument,
     "mutation CartSetProductQuantity($cartId: ID!, $quantity: Int!, $productId: ID!) {\n  cartChangeItemQuantity(id: $cartId, quantity: $quantity, productId: $productId) {\n    id\n  }\n}": types.CartSetProductQuantityDocument,
     "query CategoriesGetList {\n  categories {\n    data {\n      ...CategoriesListItem\n    }\n  }\n}": types.CategoriesGetListDocument,
     "query CategoriesGetProducts($slug: String!) {\n  category(slug: $slug) {\n    products {\n      ...ProductListItem\n    }\n  }\n}": types.CategoriesGetProductsDocument,
@@ -48,6 +49,10 @@ export function graphql(source: "query CartGetById($id: ID!) {\n  cart(id: $id) 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "fragment CartListItem on Cart {\n  id\n  items {\n    product {\n      id\n      name\n      price\n    }\n    quantity\n  }\n}"): typeof import('./graphql').CartListItemFragmentDoc;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation CartRemoveProduct($cartId: ID!, $productId: ID!) {\n  cartRemoveItem(id: $cartId, productId: $productId) {\n    id\n  }\n}"): typeof import('./graphql').CartRemoveProductDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

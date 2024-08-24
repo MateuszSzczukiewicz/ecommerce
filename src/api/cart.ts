@@ -1,6 +1,6 @@
 "use server";
 
-import { CartFindOrCreateDocument, CartItemInput } from "../gql/graphql";
+import { CartFindOrCreateDocument, CartItemInput, CartRemoveProductDocument } from "../gql/graphql";
 import { CartSetProductQuantityDocument } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
@@ -122,6 +122,17 @@ export const changeItemQuantity = async (productId: string, quantity: number) =>
 	await executeGraphql({
 		query: CartSetProductQuantityDocument,
 		variables: { cartId, productId, quantity },
+		next: {
+			tags: ["cart"],
+		},
+	});
+};
+
+export const removeItem = async (productId: string) => {
+	const cartId = (await findOrCreateCart()).id;
+	await executeGraphql({
+		query: CartRemoveProductDocument,
+		variables: { cartId, productId },
 		next: {
 			tags: ["cart"],
 		},
