@@ -13,6 +13,9 @@ export const getProductsList = async (take = PAGE_SIZE, skip = 0) => {
 	const graphqlResponse = await executeGraphql({
 		query: ProductsGetListDocument,
 		variables: { take, skip },
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
 	const data = graphqlResponse.products.data;
@@ -25,6 +28,9 @@ export const getProductById = async (id: string) => {
 	const graphqlResponse = await executeGraphql({
 		query: ProductGetByIdDocument,
 		variables: { id },
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
 	return graphqlResponse.product;
@@ -38,6 +44,9 @@ export const getSuggestedProductsList = async (
 	const graphqlResponse = await executeGraphql({
 		query: ProductsGetSuggestedDocument,
 		variables: { take, order, orderBy },
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
 	return graphqlResponse.products.data;
@@ -47,6 +56,9 @@ export const getProductsSearchList = async (take = PAGE_SIZE, skip = 0, searchTe
 	const graphqlResponse = await executeGraphql({
 		query: ProductsSearchListDocument,
 		variables: { take, skip, searchTerm },
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
 	const data = graphqlResponse.products.data;

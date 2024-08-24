@@ -11,6 +11,7 @@ export const getCartById = async (cartId: string) => {
 		const response = await executeGraphql({
 			query: CartGetByIdDocument,
 			variables: { id: cartId },
+			cache: "no-store",
 			next: {
 				tags: ["cart"],
 			},
@@ -31,6 +32,7 @@ const createNewCart = async () => {
 		const createCartResponse = await executeGraphql({
 			query: CartFindOrCreateDocument,
 			variables: { items: [] },
+			cache: "no-store",
 			next: {
 				tags: ["cart"],
 			},
@@ -72,6 +74,7 @@ export const findOrCreateCart = async () => {
 			const response = await executeGraphql({
 				query: CartFindOrCreateDocument,
 				variables: { id: cart.id, items: [] },
+				cache: "no-store",
 				next: {
 					tags: ["cart"],
 				},
@@ -101,6 +104,7 @@ export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 		const response = await executeGraphql({
 			query: CartAddProductDocument,
 			variables: { cartAddItemId, input },
+			cache: "no-store",
 			next: {
 				tags: ["cart"],
 			},
@@ -122,6 +126,7 @@ export const changeItemQuantity = async (productId: string, quantity: number) =>
 	await executeGraphql({
 		query: CartSetProductQuantityDocument,
 		variables: { cartId, productId, quantity },
+		cache: "no-store",
 		next: {
 			tags: ["cart"],
 		},
@@ -133,6 +138,7 @@ export const removeItem = async (productId: string) => {
 	await executeGraphql({
 		query: CartRemoveProductDocument,
 		variables: { cartId, productId },
+		cache: "no-store",
 		next: {
 			tags: ["cart"],
 		},
