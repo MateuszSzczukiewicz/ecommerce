@@ -1,8 +1,9 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { type Route } from "next";
 
-export const Footer = () => {
+export const Footer = async () => {
 	const router = useRouter();
 
 	const navigateTo = (path: Route) => {

@@ -1,4 +1,4 @@
-import { findOrCreateCart } from "@/api/cart";
+import { findOrCreateCart, getCartFromCookie } from "@/api/cart";
 import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -9,8 +9,9 @@ export const Cart = async () => {
 		redirect("/cart");
 	};
 
-	const cart = await findOrCreateCart();
-	const quantity = cart.items.reduce(
+	const cart = await getCartFromCookie();
+
+	const quantity = cart?.items.reduce(
 		(acc: number, item: { quantity: number }) => acc + item.quantity,
 		0,
 	);

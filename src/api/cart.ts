@@ -26,6 +26,16 @@ export const getCartById = async (cartId: string) => {
 	}
 };
 
+export const getCartFromCookie = async () => {
+	const cartId = cookies().get("cartId")?.value;
+
+	if (cartId) {
+		return await getCartById(cartId);
+	}
+
+	return null;
+};
+
 const createNewCart = async () => {
 	"use server";
 	try {
