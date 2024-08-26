@@ -1,4 +1,4 @@
-import { findOrCreateCart } from "@/api/cart";
+import { findOrCreateCart, handlePaymantAction } from "@/api/cart";
 import { formatMoney } from "@/app/utils";
 import { IncrementProductQuantityButton } from "@/ui/atoms/IncrementProductQuantityButton";
 import { RemoveButton } from "@/ui/atoms/RemoveButton";
@@ -43,6 +43,14 @@ export default async function CartPage() {
 					})}
 				</tbody>
 			</table>
+			<form action={handlePaymantAction}>
+				<button
+					type="submit"
+					className="rounded-sm border bg-slate-100 px-8 py-2 shadow-sm transition-colors hover:bg-slate-200"
+				>
+					Pay
+				</button>
+			</form>
 		</div>
 	);
 }

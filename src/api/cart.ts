@@ -5,6 +5,8 @@ import { CartSetProductQuantityDocument } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
 import { cookies } from "next/headers";
+import Stripe from "stripe";
+import { redirect } from "next/navigation";
 
 export const getCartById = async (cartId: string) => {
 	try {
@@ -153,4 +155,50 @@ export const removeItem = async (productId: string) => {
 			tags: ["cart"],
 		},
 	});
+};
+
+export const handlePaymantAction = async () => {
+	"use server";
+
+	if (!process.env.STRIPE_SECRET_KEY) {
+		throw new Error("Missing Stripe secret key");
+	}
+
+	const cart = await getCartFromCookie();
+
+	if (!cart) {
+		throw new Error("Cart not found");
+	}
+
+	const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+		apiVersion: "2024-06-20",
+		typescript: true,
+	});
+
+	const checkoutSession = await stripe.checkout.sessions.create({
+		payment_method_types: ["card"],
+		metadata: {
+			cartId: cart.id,
+		},
+		line_items: cart.items.map(({ product, quantity }) => ({
+			price_data: {
+				currency: "usd",
+				product_data: {
+					name: product.name || "",
+				},
+				unit_amount: product.price || 0,
+			},
+			quantity,
+		})),
+		mode: "payment",
+		success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart/success?sessionId={CHECKOUT_SESSION_ID}`,
+		cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart/cancel`,
+	});
+
+	if (!checkoutSession.url) {
+		throw new Error("Failed to create checkout session");
+	}
+
+	cookies().set("cartId", "");
+	redirect(checkoutSession.url);
 };
