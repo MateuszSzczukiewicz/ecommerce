@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type Route } from "next";
 
-export const Footer = async () => {
+export const Footer = () => {
 	const router = useRouter();
 
 	const navigateTo = (path: Route) => {
