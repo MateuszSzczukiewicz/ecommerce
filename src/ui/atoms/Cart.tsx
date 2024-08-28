@@ -11,10 +11,8 @@ export const Cart = async () => {
 
 	const cart = await getCartFromCookie();
 
-	const quantity = cart?.items.reduce(
-		(acc: number, item: { quantity: number }) => acc + item.quantity,
-		0,
-	);
+	const quantity =
+		cart?.items?.reduce((acc: number, item: { quantity: number }) => acc + item.quantity, 0) ?? 0;
 
 	return (
 		<form action={handleCreateOrFindCart}>
