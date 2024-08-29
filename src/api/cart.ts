@@ -32,14 +32,19 @@ export const getCartFromCookie = async () => {
 	const cartId = cookies().get("cartId")?.value;
 
 	if (cartId) {
-		return await getCartById(cartId);
+		try {
+			const cart = await getCartById(cartId);
+			return cart;
+		} catch (err) {
+			console.error("Error retrieving cart from cookie:", err);
+			cookies().delete("cartId");
+		}
 	}
 
 	return null;
 };
 
 const createNewCart = async () => {
-	"use server";
 	try {
 		const createCartResponse = await executeGraphql({
 			query: CartFindOrCreateDocument,
@@ -57,7 +62,7 @@ const createNewCart = async () => {
 		const newCart = createCartResponse.cartFindOrCreate;
 
 		cookies().set("cartId", newCart.id, {
-			maxAge: 60 * 60 * 24 * 365,
+			maxAge: 60 * 60 * 24 * 365, // 1 rok
 			expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
 			httpOnly: true,
 			sameSite: "lax",
@@ -72,36 +77,10 @@ const createNewCart = async () => {
 };
 
 export const findOrCreateCart = async () => {
-	const cartId = cookies().get("cartId")?.value;
+	const existingCart = await getCartFromCookie();
 
-	if (cartId) {
-		try {
-			const cart = await getCartById(cartId);
-
-			if (!cart) {
-				cookies().delete("cartId");
-				return await createNewCart();
-			}
-
-			const response = await executeGraphql({
-				query: CartFindOrCreateDocument,
-				variables: { id: cart.id, items: [] },
-				cache: "no-store",
-				next: {
-					tags: ["cart"],
-				},
-			});
-
-			if (!response || !response.cartFindOrCreate) {
-				throw new Error("Failed to create or update cart");
-			}
-
-			return response.cartFindOrCreate;
-		} catch (err) {
-			console.error("Error fetching or updating cart by id:", err);
-			cookies().delete("cartId");
-			throw new Error("Failed to fetch or update cart, deleted cartId cookie");
-		}
+	if (existingCart) {
+		return existingCart;
 	}
 
 	return await createNewCart();
@@ -109,13 +88,13 @@ export const findOrCreateCart = async () => {
 
 export const addToCart = async ({ productId, quantity }: CartItemInput) => {
 	try {
-		const cartAddItemId = (await findOrCreateCart()).id;
+		const cartId = (await findOrCreateCart()).id;
 
 		const input = { productId, quantity };
 
 		const response = await executeGraphql({
 			query: CartAddProductDocument,
-			variables: { cartAddItemId, input },
+			variables: { cartAddItemId: cartId, input },
 			cache: "no-store",
 			next: {
 				tags: ["cart"],
@@ -157,14 +136,12 @@ export const removeItem = async (productId: string) => {
 	});
 };
 
-export const handlePaymantAction = async () => {
-	"use server";
-
+export const handlePaymentAction = async () => {
 	if (!process.env.STRIPE_SECRET_KEY) {
 		throw new Error("Missing Stripe secret key");
 	}
 
-	const cart = await getCartFromCookie();
+	const cart = await findOrCreateCart();
 
 	if (!cart) {
 		throw new Error("Cart not found");
@@ -200,5 +177,6 @@ export const handlePaymantAction = async () => {
 	}
 
 	cookies().set("cartId", "");
+
 	redirect(checkoutSession.url);
 };

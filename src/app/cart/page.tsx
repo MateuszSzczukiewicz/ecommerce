@@ -1,14 +1,14 @@
-import { findOrCreateCart, handlePaymantAction } from "@/api/cart";
+import { getCartFromCookie, handlePaymentAction } from "@/api/cart";
 import { formatMoney } from "@/app/utils";
 import { IncrementProductQuantityButton } from "@/ui/atoms/IncrementProductQuantityButton";
 import { RemoveButton } from "@/ui/atoms/RemoveButton";
 import { redirect } from "next/navigation";
 
 export default async function CartPage() {
-	const cart = await findOrCreateCart();
+	const cart = await getCartFromCookie();
 
 	if (!cart) {
-		redirect("/");
+		return redirect("/");
 	}
 
 	return (
@@ -43,7 +43,7 @@ export default async function CartPage() {
 					})}
 				</tbody>
 			</table>
-			<form action={handlePaymantAction}>
+			<form action={handlePaymentAction}>
 				<button
 					type="submit"
 					className="rounded-sm border bg-slate-100 px-8 py-2 shadow-sm transition-colors hover:bg-slate-200"
