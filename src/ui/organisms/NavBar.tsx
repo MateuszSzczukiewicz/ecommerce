@@ -1,6 +1,7 @@
 import { SearchForm } from "@/ui/molecules/SearchForm";
 import { NavLinks } from "@/ui/atoms/NavLinks";
 import { Cart } from "@/ui/atoms/Cart";
+import { SignInButton, UserButton, SignedOut, SignedIn } from "@clerk/nextjs";
 
 export const NavBar = async () => {
 	return (
@@ -9,6 +10,12 @@ export const NavBar = async () => {
 			<div className="flex items-center justify-center gap-10">
 				<SearchForm />
 				<Cart />
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
+				<SignedOut>
+					<SignInButton />
+				</SignedOut>
 			</div>
 		</nav>
 	);
