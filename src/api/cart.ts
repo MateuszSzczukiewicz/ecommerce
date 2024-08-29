@@ -7,6 +7,7 @@ import { CartAddProductDocument, CartGetByIdDocument } from "@/gql/graphql";
 import { cookies } from "next/headers";
 import Stripe from "stripe";
 import { redirect } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 export const getCartById = async (cartId: string) => {
 	try {
@@ -122,6 +123,7 @@ export const changeItemQuantity = async (productId: string, quantity: number) =>
 			tags: ["cart"],
 		},
 	});
+	revalidateTag("cart");
 };
 
 export const removeItem = async (productId: string) => {
