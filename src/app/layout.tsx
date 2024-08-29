@@ -14,8 +14,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
 	children,
+	modal,
 }: Readonly<{
 	children: ReactNode;
+	modal: ReactNode;
 }>) {
 	return (
 		<html lang="pl">
@@ -24,6 +26,7 @@ export default async function RootLayout({
 					<NavBar />
 					<main className="mt-5 flex flex-grow justify-center">{children}</main>
 					<Footer />
+					{modal}
 				</div>
 			</body>
 		</html>
