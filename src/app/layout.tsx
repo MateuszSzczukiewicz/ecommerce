@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { type ReactNode } from "react";
 import { Footer } from "@/ui/molecules/Footer";
 import { NavBar } from "@/ui/organisms/NavBar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const montserrat = Montserrat({ subsets: ["latin", "latin-ext"] });
 
@@ -20,15 +21,17 @@ export default async function RootLayout({
 	modal: ReactNode;
 }>) {
 	return (
-		<html lang="pl">
-			<body className={montserrat.className}>
-				<div className="flex min-h-screen flex-col">
-					<NavBar />
-					<main className="mt-5 flex flex-grow justify-center">{children}</main>
-					<Footer />
-					{modal}
-				</div>
-			</body>
-		</html>
+		<ClerkProvider>
+			<html lang="pl">
+				<body className={montserrat.className}>
+					<div className="flex min-h-screen flex-col">
+						<NavBar />
+						<main className="mt-5 flex flex-grow justify-center">{children}</main>
+						<Footer />
+						{modal}
+					</div>
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }
