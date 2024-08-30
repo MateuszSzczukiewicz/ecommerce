@@ -15,15 +15,18 @@ export default async function OrdersPage() {
 		<div>
 			<h1>{user.firstName}&rsquo;s Orders</h1>
 
-			{orders.meta.total === 0 ? (
-				<p>No orders found</p>
+			{orders.data.length === 0 ? (
+				<div>No orders found</div>
 			) : (
 				<ul>
 					{orders.data.map((order) => (
 						<li key={order.id}>
-							<p>Order ID: {order.id}</p>
-							<p>Order Date: {new Date(order.createdAt as Date).toLocaleDateString()}</p>
-							<p>Order Total: ${orders.meta.total}</p>
+							<div>{order.id}</div>
+							<div>
+								<time dateTime={new Date(order.createdAt as string).toISOString()}>
+									{new Date(order.createdAt as string).toLocaleDateString()}
+								</time>
+							</div>
 						</li>
 					))}
 				</ul>

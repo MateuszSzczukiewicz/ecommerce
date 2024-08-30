@@ -28,8 +28,8 @@ export default async function RootLayout({
 						<NavBar />
 						<main className="mt-5 flex flex-grow justify-center">{children}</main>
 						<Footer />
-						{modal}
 					</div>
+					{modal}
 				</body>
 			</html>
 		</ClerkProvider>
