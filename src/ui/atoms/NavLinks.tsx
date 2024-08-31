@@ -23,6 +23,7 @@ export const NavLinks = async () => {
 		{ href: "/", label: "Home" },
 		{ href: "/products", label: "All", exact: false },
 		...categoriesNavLinks,
+		{ href: "/contact", label: "Contact", exact: false },
 	];
 
 	return (
