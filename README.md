@@ -1,4 +1,54 @@
-## Installation (continued)
+# Next.js Ecommerce
+
+![Next.js](https://img.shields.io/badge/Next.js-13.4-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.5-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+## Project Description
+
+Next.js Ecommerce is a modern and efficient e-commerce application built with Next.js 13.4, TypeScript, and Tailwind CSS. This project showcases an online store with features such as product management, shopping cart functionality, and integration with the Stripe payment gateway.
+
+## Table of Contents
+
+- [Demo](#demo)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Demo
+
+Check out the live application: [Next.js Ecommerce Demo](https://mateusz-szczukiewicz.pl)
+
+## Features
+
+- Browse products
+- Add products to cart
+- Checkout process with Stripe integration
+- Admin panel for product management
+- Responsive design
+
+## Technologies
+
+- [Next.js 13.4](https://nextjs.org/)
+- [React 18](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Stripe API](https://stripe.com/docs/api)
+- [Prisma ORM](https://www.prisma.io/)
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/MateuszSzczukiewicz/Next.js-Ecommerce.git
+   cd Next.js-Ecommerce
+   ```
 
 2. Install dependencies:
 
@@ -50,4 +100,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-Mateusz Szczukiewicz - [mateusz@example.com](mailto:mateusz@example.com)
+Mateusz Szczukiewicz - [szczmat6277@gmail.com](mailto:szczmat6277@gmail.com)
+
+Visit my website: [mateusz-szczukiewicz.pl](https://mateusz-szczukiewicz.pl)
